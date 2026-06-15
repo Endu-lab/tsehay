@@ -6,25 +6,26 @@
     <title>ጸሀይ ትምህርት - Tsehay Learning: Amharic 7 Orders, English, Numbers 1-1000</title>
     <!-- Firebase SDKs -->
     <script type="module">
-        // 🔥 REPLACE WITH YOUR FIREBASE CONFIG 🔥
+        // 🔥 YOUR FIREBASE CONFIGURATION (ALREADY INSERTED) 🔥
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyCxZFWBiuWqK73EUMznAlySXrsC1EPb1BE",
+            authDomain: "tsehay-academy.firebaseapp.com",
+            projectId: "tsehay-academy",
+            storageBucket: "tsehay-academy.firebasestorage.app",
+            messagingSenderId: "107212025634",
+            appId: "1:107212025634:web:fa043393623e152923ff7b",
+            measurementId: "G-NM2DR8LMH5"
         };
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        window.appState = { auth, db, signInWithPhoneNumber, RecaptchaVerifier, onAuthStateChanged, doc, setDoc, getDoc, updateDoc, arrayUnion, increment };
+        window.appState = { auth, db, signInWithPhoneNumber, RecaptchaVerifier, onAuthStateChanged, doc, setDoc, getDoc, updateDoc, increment };
     </script>
     <style>
         * {
@@ -397,35 +398,30 @@
     let currentUser = null;
     let currentMode = "amharic";
     let currentDataset = AMHARIC_FULL;
-    let currentQuestion = null;          // { baseItem, correctNext, options }
+    let currentQuestion = null;
     let waitingForAnswer = false;
     let scoreStreak = 0;
     let correctCount = 0;
     
-    // Helper: get the exact next character in the proper sequence
     function getNextItem(item) {
         const nextOrder = item.order + 1;
         const nextItem = currentDataset.find(i => i.order === nextOrder);
         if (!nextItem && currentDataset.length > 0) {
-            // wrap to beginning (optional but prevents empty)
             return currentDataset[0];
         }
         return nextItem;
     }
     
-    // Generate a new question: shows a character, asks which comes after, gives 4 options
     function generateNewQuestion() {
         const maxOrder = Math.max(...currentDataset.map(i => i.order));
-        // only pick items that have a "next" (order < maxOrder)
         const candidates = currentDataset.filter(i => i.order < maxOrder);
-        if (candidates.length === 0) return generateNewQuestion(); // fallback
+        if (candidates.length === 0) return generateNewQuestion();
         
         const randomIndex = Math.floor(Math.random() * candidates.length);
         const baseItem = candidates[randomIndex];
         const correctNext = getNextItem(baseItem);
         if (!correctNext) return generateNewQuestion();
         
-        // Build 3 distractors (different from correct and from base)
         const wrongPool = currentDataset.filter(item => 
             item.char !== correctNext.char && item.char !== baseItem.char
         );
@@ -433,7 +429,6 @@
         const distractors = shuffledWrong.slice(0, 3);
         
         let options = [correctNext, ...distractors];
-        // shuffle options
         for (let i = options.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [options[i], options[j]] = [options[j], options[i]];
@@ -442,7 +437,6 @@
         return { baseItem, correctNext, options };
     }
     
-    // Render the current question to UI
     function renderGame() {
         if (!currentQuestion) {
             currentQuestion = generateNewQuestion();
@@ -468,7 +462,6 @@
         nextBtn.style.opacity = "1";
     }
     
-    // Handle answer click
     async function handleAnswer(selected) {
         if (waitingForAnswer) return;
         waitingForAnswer = true;
@@ -493,20 +486,10 @@
         } else {
             feedbackDiv.innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ትክክለኛው: ${currentQuestion.correctNext.char} ❌</span>`;
             scoreStreak = 0;
-            if (currentUser) {
-                try {
-                    const userRef = window.appState.doc(window.appState.db, "users", currentUser.uid);
-                    await window.appState.updateDoc(userRef, {
-                        [`progress.${currentMode}.lastWrong`]: currentQuestion.baseItem.char,
-                        lastActive: new Date().toISOString()
-                    }).catch(e => console.log("save error", e));
-                } catch(e) {}
-            }
         }
         
         document.getElementById("progressTracker").innerHTML = `⭐ Streak: ${scoreStreak} | ✅ Total: ${correctCount} ⭐`;
         
-        // Disable options until next question
         const allOptions = document.querySelectorAll(".option");
         allOptions.forEach(opt => {
             opt.style.opacity = "0.6";
@@ -514,10 +497,8 @@
         });
     }
     
-    // Load next question (called by Next button)
     function loadNextQuestion() {
         currentQuestion = generateNewQuestion();
-        // re-enable options visually
         const allOptions = document.querySelectorAll(".option");
         allOptions.forEach(opt => {
             opt.style.opacity = "1";
@@ -526,14 +507,12 @@
         renderGame();
     }
     
-    // Switch between Amharic / English / Numbers
     function switchMode(mode) {
         currentMode = mode;
         if (mode === "amharic") currentDataset = AMHARIC_FULL;
         else if (mode === "english") currentDataset = ENGLISH_LETTERS;
         else currentDataset = NUMBERS_1_1000;
         
-        // reset game state
         scoreStreak = 0;
         correctCount = 0;
         currentQuestion = null;
@@ -542,7 +521,7 @@
         renderGame();
     }
     
-    // --------------------------- FIREBASE AUTH (phone + name) ---------------------------
+    // ======================= FIREBASE AUTHENTICATION =======================
     window.initRecaptcha = () => {
         return new window.appState.RecaptchaVerifier('recaptcha-container', { size: 'invisible', callback: () => {} });
     };
@@ -608,7 +587,6 @@
         document.getElementById("otpCode").value = "";
     };
     
-    // Mode selection listeners
     document.querySelectorAll(".mode-btn").forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
@@ -617,19 +595,17 @@
         };
     });
     
-    // Next button listener
     document.getElementById("nextBtn").onclick = () => {
         loadNextQuestion();
     };
     
-    // Auth state observer (optional)
     window.appState.onAuthStateChanged(window.appState.auth, (user) => {
         if (user && document.getElementById("authSection") && !document.getElementById("authSection").classList.contains("hide")) {
-            // already logged in but showing auth section? minor edge case, ignore
+            console.log("User already logged in:", user.phoneNumber);
         }
     });
     
-    console.log("✅ Tsehay Academy fully working — 7 orders, numbers 1-1000, after-game logic fixed, sun shining ☀️");
+    console.log("✅ Tsehay Academy is ready! Sun is shining ☀️");
 </script>
 </body>
 </html>
