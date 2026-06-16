@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>ጸሀይ ትምህርት - Tsehay Learning</title>
-    <!-- Firebase SDKs - Using traditional SDK for better compatibility -->
+    <title>ጸሀይ ትምህርት - Tsehay Learning: Amharic 7 Orders, English, Numbers 1-1000</title>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -27,6 +27,7 @@
             padding: 20px;
         }
 
+        /* 🌞 RISING SUN ANIMATION (TSEHAY) */
         .sun {
             position: fixed;
             bottom: -100px;
@@ -43,8 +44,18 @@
         }
 
         @keyframes riseSun {
-            0% { bottom: -150px; width: 120px; height: 120px; opacity: 0.6; }
-            100% { bottom: 20px; width: 220px; height: 220px; opacity: 1; }
+            0% {
+                bottom: -150px;
+                width: 120px;
+                height: 120px;
+                opacity: 0.6;
+            }
+            100% {
+                bottom: 20px;
+                width: 220px;
+                height: 220px;
+                opacity: 1;
+            }
         }
 
         @keyframes glowPulse {
@@ -75,33 +86,213 @@
             backdrop-filter: blur(3px);
         }
 
-        h1 { text-align: center; font-size: 2rem; color: #b45f06; text-shadow: 2px 2px 0 #ffdd99; margin-bottom: 8px; }
-        .tsehay-logo { text-align: center; font-size: 48px; margin: 8px 0; }
-        .input-group { margin-bottom: 20px; }
-        label { font-weight: bold; display: block; margin-bottom: 8px; color: #7a4b03; }
-        input { width: 100%; padding: 14px; border-radius: 60px; border: 2px solid #ffc857; font-size: 16px; background: white; }
-        button { background: #f39c12; color: white; border: none; padding: 14px 20px; border-radius: 60px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; transition: 0.1s; box-shadow: 0 4px 0 #b45f06; }
-        button:active { transform: translateY(2px); box-shadow: 0 1px 0 #b45f06; }
-        .mode-buttons { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
-        .mode-btn { flex: 1; background: #ffd966; color: #5a3a01; font-size: 14px; padding: 12px; }
-        .mode-btn.active { background: #e67e22; color: white; box-shadow: 0 0 10px orange; }
-        .game-area { background: #fff6e5; border-radius: 48px; padding: 20px; text-align: center; border: 3px solid #ffcc77; }
-        .question-card { font-size: 80px; background: #ffefcf; display: inline-block; padding: 20px 40px; border-radius: 60px; margin: 10px; font-weight: bold; font-family: 'Noto Sans Ethiopic', monospace; box-shadow: inset 0 -2px 0 #ddb56b, 0 10px 20px rgba(0,0,0,0.1); }
-        .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 24px; }
-        .option { background: #fffaec; padding: 14px 20px; border-radius: 60px; font-size: 36px; cursor: pointer; transition: 0.05s linear; min-width: 90px; text-align: center; font-weight: bold; border: 2px solid #ffbb55; font-family: 'Noto Sans Ethiopic', monospace; }
-        .option:active { transform: scale(0.94); background: #ffe0a3; }
-        .feedback { margin-top: 20px; font-size: 22px; font-weight: bold; min-height: 70px; }
-        .correct { color: #2b7a2b; }
-        .wrong { color: #c0392b; }
-        .progress { font-size: 18px; background: #ffefcf; border-radius: 40px; padding: 10px; margin-top: 16px; font-weight: bold; }
-        .hide { display: none; }
-        .logout { background: #c0392b; margin-top: 10px; font-size: 14px; width: auto; padding: 8px 16px; }
-        .next-btn { background: #2e7d32; margin-top: 16px; }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #b45f06;
+            text-shadow: 2px 2px 0 #ffdd99;
+            margin-bottom: 8px;
+        }
+
+        .tsehay-logo {
+            text-align: center;
+            font-size: 48px;
+            margin: 8px 0;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #7a4b03;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 60px;
+            border: 2px solid #ffc857;
+            font-size: 16px;
+            background: white;
+        }
+
+        button {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #b45f06;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #b45f06;
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            background: #ffd966;
+            color: #5a3a01;
+            font-size: 14px;
+            padding: 12px;
+        }
+
+        .mode-btn.active {
+            background: #e67e22;
+            color: white;
+            box-shadow: 0 0 10px orange;
+        }
+
+        .game-area {
+            background: #fff6e5;
+            border-radius: 48px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid #ffcc77;
+        }
+
+        .question-card {
+            font-size: 80px;
+            background: #ffefcf;
+            display: inline-block;
+            padding: 20px 40px;
+            border-radius: 60px;
+            margin: 10px;
+            font-weight: bold;
+            font-family: 'Noto Sans Ethiopic', 'Segoe UI', monospace;
+            box-shadow: inset 0 -2px 0 #ddb56b, 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .option {
+            background: #fffaec;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-size: 36px;
+            cursor: pointer;
+            transition: 0.05s linear;
+            min-width: 90px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid #ffbb55;
+            font-family: 'Noto Sans Ethiopic', 'Segoe UI', monospace;
+        }
+
+        .option:active {
+            transform: scale(0.94);
+            background: #ffe0a3;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            min-height: 70px;
+        }
+
+        .correct {
+            color: #2b7a2b;
+            text-shadow: 0 0 3px #aaffaa;
+        }
+
+        .wrong {
+            color: #c0392b;
+        }
+
+        .progress {
+            font-size: 18px;
+            background: #ffefcf;
+            border-radius: 40px;
+            padding: 10px;
+            margin-top: 16px;
+            font-weight: bold;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .logout {
+            background: #c0392b;
+            margin-top: 10px;
+            font-size: 14px;
+            width: auto;
+            padding: 8px 16px;
+        }
+
+        .next-btn {
+            background: #2e7d32;
+            margin-top: 16px;
+        }
+
+        .next-btn:active {
+            transform: translateY(2px);
+        }
+        
+        .auth-toggle {
+            text-align: center;
+            margin-top: 15px;
+            color: #7a4b03;
+            cursor: pointer;
+        }
+        
+        .auth-toggle span {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        .debug-info {
+            margin-top: 20px;
+            padding: 10px;
+            background: #ffe0a3;
+            border-radius: 20px;
+            font-size: 12px;
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
         @media (max-width: 550px) {
-            .container { padding: 16px; }
-            .question-card { font-size: 48px; padding: 12px 24px; }
-            .option { font-size: 28px; padding: 8px 16px; min-width: 70px; }
-            .mode-btn { font-size: 12px; padding: 10px; }
+            .container {
+                padding: 16px;
+            }
+            .question-card {
+                font-size: 48px;
+                padding: 12px 24px;
+            }
+            .option {
+                font-size: 28px;
+                padding: 8px 16px;
+                min-width: 70px;
+            }
+            .mode-btn {
+                font-size: 12px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -109,28 +300,48 @@
 <div class="sun"></div>
 <div class="sun-rays"></div>
 <div class="container" id="app">
+    <!-- REGISTRATION SECTION (Email/Password) -->
     <div id="authSection">
         <div class="tsehay-logo">🌞 ጸሀይ 🌞</div>
         <h1>Tsehay Academy</h1>
         <div class="sub" style="text-align: center; margin-bottom: 20px;">Amharic 7 Orders • English • Numbers 1-1000</div>
-        <div class="input-group">
-            <label>👧🧒 Student Full Name</label>
-            <input type="text" id="studentName" placeholder="e.g., Selam, Dawit">
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <div class="input-group">
+                <label>📧 Email Address</label>
+                <input type="email" id="loginEmail" placeholder="student@example.com">
+            </div>
+            <div class="input-group">
+                <label>🔒 Password</label>
+                <input type="password" id="loginPassword" placeholder="password">
+            </div>
+            <button id="loginBtn">🔑 Login</button>
+            <div class="auth-toggle">New student? <span id="showSignup">Create an account here</span></div>
         </div>
-        <div class="input-group">
-            <label>📱 Mobile Number (with country code)</label>
-            <input type="tel" id="phoneNumber" placeholder="+251912345678" value="+251">
+        
+        <!-- Signup Form -->
+        <div id="signupForm" class="hide">
+            <div class="input-group">
+                <label>👧🧒 Student Full Name</label>
+                <input type="text" id="signupName" placeholder="e.g., Selam, Dawit">
+            </div>
+            <div class="input-group">
+                <label>📧 Email Address</label>
+                <input type="email" id="signupEmail" placeholder="student@example.com">
+            </div>
+            <div class="input-group">
+                <label>🔒 Password (minimum 6 characters)</label>
+                <input type="password" id="signupPassword" placeholder="password">
+            </div>
+            <button id="signupBtn">📝 Register & Start Learning</button>
+            <div class="auth-toggle">Already have an account? <span id="showLogin">Login here</span></div>
         </div>
-        <div id="recaptcha-container"></div>
-        <button id="sendOtpBtn">🌅 Register & Send OTP</button>
-        <div class="input-group hide" id="otpGroup">
-            <label>🔐 Verification Code</label>
-            <input type="text" id="otpCode" placeholder="123456">
-            <button id="verifyBtn">✅ Verify & Start Learning</button>
-        </div>
-        <div id="debugInfo" style="margin-top: 20px; padding: 10px; background: #ffe0a3; border-radius: 20px; font-size: 12px; display: none;"></div>
+        
+        <div id="debugInfo" class="debug-info"></div>
     </div>
 
+    <!-- MAIN LEARNING DASHBOARD -->
     <div id="learningSection" class="hide">
         <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
             <h2>☀️ ጤና ይስጥልኝ, <span id="userNameDisplay"></span>!</h2>
@@ -146,22 +357,22 @@
             <div class="question-card" id="currentQuestion">?</div>
             <div class="options" id="optionsContainer"></div>
             <div class="feedback" id="feedbackMsg"></div>
-            <div class="progress" id="progressTracker">⭐ Streak: 0 ⭐</div>
+            <div class="progress" id="progressTracker">⭐ Streak: 0 | ✅ Total: 0 ⭐</div>
             <button id="nextBtn" class="next-btn">✨ ቀጣይ / Next ✨</button>
         </div>
+        <div style="margin-top: 16px; text-align: center; font-size: 13px;">💡 ጸሀይ ትምህርት - በቅደም ተማር (Learn in order)</div>
     </div>
 </div>
 
 <script>
-    // Firebase config - YOUR ACTUAL CONFIG
+    // ======================= FIREBASE CONFIGURATION =======================
     const firebaseConfig = {
         apiKey: "AIzaSyCxZFWBiuWqK73EUMznAlySXrsC1EPb1BE",
         authDomain: "tsehay-academy.firebaseapp.com",
         projectId: "tsehay-academy",
         storageBucket: "tsehay-academy.firebasestorage.app",
         messagingSenderId: "107212025634",
-        appId: "1:107212025634:web:fa043393623e152923ff7b",
-        measurementId: "G-NM2DR8LMH5"
+        appId: "1:107212025634:web:fa043393623e152923ff7b"
     };
     
     // Initialize Firebase
@@ -169,49 +380,72 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    // Show debug info
+    // Debug function
     function showDebug(message, isError = false) {
         const debugDiv = document.getElementById('debugInfo');
-        debugDiv.style.display = 'block';
-        debugDiv.innerHTML += `<div style="color: ${isError ? 'red' : 'green'}">${new Date().toLocaleTimeString()}: ${message}</div>`;
+        if (debugDiv) {
+            debugDiv.style.display = 'block';
+            const color = isError ? 'red' : 'green';
+            debugDiv.innerHTML += `<div style="color: ${color}; border-bottom: 1px solid #ddd; padding: 4px 0;">${new Date().toLocaleTimeString()}: ${message}</div>`;
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        }
         console.log(message);
     }
     
-    // Amharic 7 orders data
+    // ======================= AMHARIC 7 ORDERS DATA =======================
     const amharicFamilyMap = {
-        "ሀ": ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"], "ለ": ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"],
-        "ሐ": ["ሐ","ሑ","ሒ","ሓ","ሔ","ሕ","ሖ"], "መ": ["መ","ሙ","ሚ","ማ","ሜ","ም","ሞ"],
-        "ሠ": ["ሠ","ሡ","ሢ","ሣ","ሤ","ሥ","ሦ"], "ረ": ["ረ","ሩ","ሪ","ራ","ሬ","ር","ሮ"],
-        "ሰ": ["ሰ","ሱ","ሲ","ሳ","ሴ","ስ","ሶ"], "ሸ": ["ሸ","ሹ","ሺ","ሻ","ሼ","ሽ","ሾ"],
-        "ቀ": ["ቀ","ቁ","ቂ","ቃ","ቄ","ቅ","ቆ"], "በ": ["በ","ቡ","ቢ","ባ","ቤ","ብ","ቦ"],
-        "ተ": ["ተ","ቱ","ቲ","ታ","ቴ","ት","ቶ"], "ቸ": ["ቸ","ቹ","ቺ","ቻ","ቼ","ች","ቾ"],
-        "ኀ": ["ኀ","ኁ","ኂ","ኃ","ኄ","ኅ","ኆ"], "ነ": ["ነ","ኑ","ኒ","ና","ኔ","ን","ኖ"],
-        "ኘ": ["ኘ","ኙ","ኚ","ኛ","ኜ","ኝ","ኞ"], "አ": ["አ","ኡ","ኢ","ኣ","ኤ","እ","ኦ"],
-        "ከ": ["ከ","ኩ","ኪ","ካ","ኬ","ክ","ኮ"], "ኸ": ["ኸ","ኹ","ኺ","ኻ","ኼ","ኽ","ኾ"],
-        "ወ": ["ወ","ዉ","ዊ","ዋ","ዌ","ው","ዎ"], "ዐ": ["ዐ","ዑ","ዒ","ዓ","ዔ","ዕ","ዖ"],
-        "ዘ": ["ዘ","ዙ","ዚ","ዛ","ዜ","ዝ","ዞ"], "ዠ": ["ዠ","ዡ","ዢ","ዣ","ዤ","ዥ","ዦ"],
-        "የ": ["የ","ዩ","ዪ","ያ","ዬ","ይ","ዮ"], "ደ": ["ደ","ዱ","ዲ","ዳ","ዴ","ድ","ዶ"],
-        "ጀ": ["ጀ","ጁ","ጂ","ጃ","ጄ","ጅ","ጆ"], "ገ": ["ገ","ጉ","ጊ","ጋ","ጌ","ግ","ጎ"],
-        "ጠ": ["ጠ","ጡ","ጢ","ጣ","ጤ","ጥ","ጦ"], "ጨ": ["ጨ","ጩ","ጪ","ጫ","ጬ","ጭ","ጮ"],
-        "ጰ": ["ጰ","ጱ","ጲ","ጳ","ጴ","ጵ","ጶ"], "ጸ": ["ጸ","ጹ","ጺ","ጻ","ጼ","ጽ","ጾ"],
-        "ፀ": ["ፀ","ፁ","ፂ","ፃ","ፄ","ፅ","ፆ"], "ፈ": ["ፈ","ፉ","ፊ","ፋ","ፌ","ፍ","ፎ"], "ፐ": ["ፐ","ፑ","ፒ","ፓ","ፔ","ፕ","ፖ"]
+        "ሀ": ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"],
+        "ለ": ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"],
+        "ሐ": ["ሐ","ሑ","ሒ","ሓ","ሔ","ሕ","ሖ"],
+        "መ": ["መ","ሙ","ሚ","ማ","ሜ","ም","ሞ"],
+        "ሠ": ["ሠ","ሡ","ሢ","ሣ","ሤ","ሥ","ሦ"],
+        "ረ": ["ረ","ሩ","ሪ","ራ","ሬ","ር","ሮ"],
+        "ሰ": ["ሰ","ሱ","ሲ","ሳ","ሴ","ስ","ሶ"],
+        "ሸ": ["ሸ","ሹ","ሺ","ሻ","ሼ","ሽ","ሾ"],
+        "ቀ": ["ቀ","ቁ","ቂ","ቃ","ቄ","ቅ","ቆ"],
+        "በ": ["በ","ቡ","ቢ","ባ","ቤ","ብ","ቦ"],
+        "ተ": ["ተ","ቱ","ቲ","ታ","ቴ","ት","ቶ"],
+        "ቸ": ["ቸ","ቹ","ቺ","ቻ","ቼ","ች","ቾ"],
+        "ኀ": ["ኀ","ኁ","ኂ","ኃ","ኄ","ኅ","ኆ"],
+        "ነ": ["ነ","ኑ","ኒ","ና","ኔ","ን","ኖ"],
+        "ኘ": ["ኘ","ኙ","ኚ","ኛ","ኜ","ኝ","ኞ"],
+        "አ": ["አ","ኡ","ኢ","ኣ","ኤ","እ","ኦ"],
+        "ከ": ["ከ","ኩ","ኪ","ካ","ኬ","ክ","ኮ"],
+        "ኸ": ["ኸ","ኹ","ኺ","ኻ","ኼ","ኽ","ኾ"],
+        "ወ": ["ወ","ዉ","ዊ","ዋ","ዌ","ው","ዎ"],
+        "ዐ": ["ዐ","ዑ","ዒ","ዓ","ዔ","ዕ","ዖ"],
+        "ዘ": ["ዘ","ዙ","ዚ","ዛ","ዜ","ዝ","ዞ"],
+        "ዠ": ["ዠ","ዡ","ዢ","ዣ","ዤ","ዥ","ዦ"],
+        "የ": ["የ","ዩ","ዪ","ያ","ዬ","ይ","ዮ"],
+        "ደ": ["ደ","ዱ","ዲ","ዳ","ዴ","ድ","ዶ"],
+        "ጀ": ["ጀ","ጁ","ጂ","ጃ","ጄ","ጅ","ጆ"],
+        "ገ": ["ገ","ጉ","ጊ","ጋ","ጌ","ግ","ጎ"],
+        "ጠ": ["ጠ","ጡ","ጢ","ጣ","ጤ","ጥ","ጦ"],
+        "ጨ": ["ጨ","ጩ","ጪ","ጫ","ጬ","ጭ","ጮ"],
+        "ጰ": ["ጰ","ጱ","ጲ","ጳ","ጴ","ጵ","ጶ"],
+        "ጸ": ["ጸ","ጹ","ጺ","ጻ","ጼ","ጽ","ጾ"],
+        "ፀ": ["ፀ","ፁ","ፂ","ፃ","ፄ","ፅ","ፆ"],
+        "ፈ": ["ፈ","ፉ","ፊ","ፋ","ፌ","ፍ","ፎ"],
+        "ፐ": ["ፐ","ፑ","ፒ","ፓ","ፔ","ፕ","ፖ"]
     };
     
     function buildFullAmharic() {
         let fullList = [];
         let orderCounter = 1;
         for (let base of Object.keys(amharicFamilyMap)) {
-            for (let char of amharicFamilyMap[base]) {
+            const family = amharicFamilyMap[base];
+            for (let char of family) {
                 fullList.push({ char: char, order: orderCounter++, group: base });
             }
         }
         return fullList;
     }
     
-    const AMHARIC_FULL = buildFullAmharic();
-    const ENGLISH_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').map((ch, idx) => ({ char: ch, order: idx + 1 }));
-    const NUMBERS_1_1000 = Array.from({ length: 1000 }, (_, i) => ({ char: (i + 1).toString(), order: i + 1 }));
+    const AMHARIC_FULL = buildFullAmharic(); // 231 characters (33 bases × 7 orders)
+    const ENGLISH_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').map((ch, idx) => ({ char: ch, order: idx + 1, group: "EN" }));
+    const NUMBERS_1_1000 = Array.from({ length: 1000 }, (_, i) => ({ char: (i + 1).toString(), order: i + 1, group: "NUM" }));
     
+    // ======================= GAME STATE =======================
     let currentUser = null;
     let currentMode = "amharic";
     let currentDataset = AMHARIC_FULL;
@@ -220,35 +454,57 @@
     let scoreStreak = 0;
     let correctCount = 0;
     
+    // Helper: Get next item in sequence
     function getNextItem(item) {
         const nextOrder = item.order + 1;
-        return currentDataset.find(i => i.order === nextOrder) || currentDataset[0];
+        const nextItem = currentDataset.find(i => i.order === nextOrder);
+        if (!nextItem && currentDataset.length > 0) {
+            return currentDataset[0];
+        }
+        return nextItem;
     }
     
+    // Generate a new question
     function generateNewQuestion() {
         const maxOrder = Math.max(...currentDataset.map(i => i.order));
         const candidates = currentDataset.filter(i => i.order < maxOrder);
         if (candidates.length === 0) return generateNewQuestion();
         
-        const baseItem = candidates[Math.floor(Math.random() * candidates.length)];
+        const randomIndex = Math.floor(Math.random() * candidates.length);
+        const baseItem = candidates[randomIndex];
         const correctNext = getNextItem(baseItem);
+        
         if (!correctNext) return generateNewQuestion();
         
-        const wrongPool = currentDataset.filter(item => item.char !== correctNext.char && item.char !== baseItem.char);
-        const distractors = [...wrongPool].sort(() => Math.random() - 0.5).slice(0, 3);
+        // Generate 3 distractors
+        const wrongPool = currentDataset.filter(item => 
+            item.char !== correctNext.char && item.char !== baseItem.char
+        );
+        const shuffledWrong = [...wrongPool].sort(() => Math.random() - 0.5);
+        const distractors = shuffledWrong.slice(0, 3);
+        
         let options = [correctNext, ...distractors];
+        
+        // Shuffle options
         for (let i = options.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [options[i], options[j]] = [options[j], options[i]];
         }
+        
         return { baseItem, correctNext, options };
     }
     
+    // Render the game UI
     function renderGame() {
-        if (!currentQuestion) currentQuestion = generateNewQuestion();
+        if (!currentQuestion) {
+            currentQuestion = generateNewQuestion();
+        }
+        
         document.getElementById("currentQuestion").innerText = currentQuestion.baseItem.char;
+        
         const optionsDiv = document.getElementById("optionsContainer");
         optionsDiv.innerHTML = "";
+        
         currentQuestion.options.forEach(opt => {
             const btn = document.createElement("div");
             btn.className = "option";
@@ -256,11 +512,17 @@
             btn.onclick = () => handleAnswer(opt);
             optionsDiv.appendChild(btn);
         });
+        
         document.getElementById("feedbackMsg").innerHTML = "";
         waitingForAnswer = false;
         document.getElementById("progressTracker").innerHTML = `⭐ Streak: ${scoreStreak} | ✅ Total: ${correctCount} ⭐`;
+        
+        const nextBtn = document.getElementById("nextBtn");
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = "1";
     }
     
+    // Handle answer selection
     async function handleAnswer(selected) {
         if (waitingForAnswer) return;
         waitingForAnswer = true;
@@ -269,9 +531,11 @@
         const feedbackDiv = document.getElementById("feedbackMsg");
         
         if (isCorrect) {
-            feedbackDiv.innerHTML = "<span class='correct'>✅ ትክክል! ጥሩ! ✅</span>";
+            feedbackDiv.innerHTML = "<span class='correct'>✅ ትክክል! ጥሩ! ✅ Correct!</span>";
             scoreStreak++;
             correctCount++;
+            
+            // Save progress to Firebase
             if (currentUser) {
                 try {
                     const userRef = db.collection("users").doc(currentUser.uid);
@@ -280,9 +544,9 @@
                         [`progress.${currentMode}.totalCorrect`]: firebase.firestore.FieldValue.increment(1),
                         lastActive: new Date().toISOString()
                     });
-                    showDebug("Progress saved to Firebase!");
+                    showDebug("✅ Progress saved to Firebase!");
                 } catch(e) {
-                    showDebug("Error saving: " + e.message, true);
+                    showDebug("⚠️ Progress save error: " + e.message, true);
                 }
             }
         } else {
@@ -291,112 +555,158 @@
         }
         
         document.getElementById("progressTracker").innerHTML = `⭐ Streak: ${scoreStreak} | ✅ Total: ${correctCount} ⭐`;
-        document.querySelectorAll(".option").forEach(opt => {
+        
+        // Disable options until next question
+        const allOptions = document.querySelectorAll(".option");
+        allOptions.forEach(opt => {
             opt.style.opacity = "0.6";
             opt.style.pointerEvents = "none";
         });
     }
     
+    // Load next question
     function loadNextQuestion() {
         currentQuestion = generateNewQuestion();
-        document.querySelectorAll(".option").forEach(opt => {
+        const allOptions = document.querySelectorAll(".option");
+        allOptions.forEach(opt => {
             opt.style.opacity = "1";
             opt.style.pointerEvents = "auto";
         });
         renderGame();
     }
     
+    // Switch between learning modes
     function switchMode(mode) {
         currentMode = mode;
-        currentDataset = mode === "amharic" ? AMHARIC_FULL : (mode === "english" ? ENGLISH_LETTERS : NUMBERS_1_1000);
+        if (mode === "amharic") {
+            currentDataset = AMHARIC_FULL;
+        } else if (mode === "english") {
+            currentDataset = ENGLISH_LETTERS;
+        } else {
+            currentDataset = NUMBERS_1_1000;
+        }
+        
         scoreStreak = 0;
         correctCount = 0;
         currentQuestion = null;
+        waitingForAnswer = false;
+        currentQuestion = generateNewQuestion();
         renderGame();
     }
     
-    // Firebase Auth
-    window.recaptchaVerifier = null;
+    // ======================= FIREBASE AUTHENTICATION =======================
     
-    document.getElementById("sendOtpBtn").onclick = async () => {
-        const phone = document.getElementById("phoneNumber").value.trim();
-        const name = document.getElementById("studentName").value.trim();
-        if (!phone || !name) {
-            alert("Please enter both name and mobile number");
-            return;
-        }
-        if (!phone.startsWith("+")) {
-            alert("Use country code (e.g., +251 for Ethiopia)");
-            return;
-        }
-        
-        showDebug("Sending OTP to " + phone);
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-            size: 'invisible',
-            callback: () => showDebug("Recaptcha resolved")
-        });
-        
-        try {
-            const confirmation = await auth.signInWithPhoneNumber(phone, window.recaptchaVerifier);
-            window.confirmationResult = confirmation;
-            document.getElementById("otpGroup").classList.remove("hide");
-            showDebug("OTP sent successfully!");
-            alert("✅ OTP sent! Check your phone.");
-        } catch(e) {
-            showDebug("Error: " + e.message, true);
-            alert("Error: " + e.message);
-        }
+    // Toggle between login and signup forms
+    document.getElementById("showSignup").onclick = () => {
+        document.getElementById("loginForm").classList.add("hide");
+        document.getElementById("signupForm").classList.remove("hide");
+        document.getElementById("debugInfo").innerHTML = "";
     };
     
-    document.getElementById("verifyBtn").onclick = async () => {
-        const otp = document.getElementById("otpCode").value.trim();
-        const name = document.getElementById("studentName").value.trim();
-        if (!otp) { alert("Enter OTP code"); return; }
+    document.getElementById("showLogin").onclick = () => {
+        document.getElementById("signupForm").classList.add("hide");
+        document.getElementById("loginForm").classList.remove("hide");
+        document.getElementById("debugInfo").innerHTML = "";
+    };
+    
+    // Sign Up
+    document.getElementById("signupBtn").onclick = async () => {
+        const name = document.getElementById("signupName").value.trim();
+        const email = document.getElementById("signupEmail").value.trim();
+        const password = document.getElementById("signupPassword").value;
+        
+        if (!name || !email || !password) {
+            alert("Please fill all fields");
+            return;
+        }
+        
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters");
+            return;
+        }
+        
+        showDebug("📝 Creating new account for: " + email);
         
         try {
-            const result = await window.confirmationResult.confirm(otp);
-            const user = result.user;
-            showDebug("User verified: " + user.uid);
+            const userCred = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCred.user;
             
-            const userRef = db.collection("users").doc(user.uid);
-            const doc = await userRef.get();
-            
-            if (!doc.exists) {
-                await userRef.set({
-                    name: name,
-                    phone: user.phoneNumber,
-                    createdAt: new Date().toISOString(),
-                    progress: {
-                        amharic: { streak: 0, totalCorrect: 0 },
-                        english: { streak: 0, totalCorrect: 0 },
-                        numbers: { streak: 0, totalCorrect: 0 }
-                    }
-                });
-                showDebug("New user created in Firestore!");
-            } else {
-                showDebug("Existing user found!");
-            }
+            // Save user data to Firestore
+            await db.collection("users").doc(user.uid).set({
+                name: name,
+                email: email,
+                createdAt: new Date().toISOString(),
+                progress: {
+                    amharic: { streak: 0, totalCorrect: 0 },
+                    english: { streak: 0, totalCorrect: 0 },
+                    numbers: { streak: 0, totalCorrect: 0 }
+                }
+            });
             
             currentUser = user;
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
             switchMode("amharic");
-            showDebug("Ready to learn! ☀️");
+            
+            showDebug("✅ Account created successfully! Welcome " + name + "!");
         } catch(e) {
-            showDebug("Verification error: " + e.message, true);
-            alert("Wrong OTP: " + e.message);
+            showDebug("❌ Signup error: " + e.message, true);
+            alert("Signup failed: " + e.message);
         }
     };
     
-    document.getElementById("logoutBtn").onclick = () => {
-        auth.signOut();
+    // Login
+    document.getElementById("loginBtn").onclick = async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        
+        if (!email || !password) {
+            alert("Please enter email and password");
+            return;
+        }
+        
+        showDebug("🔐 Logging in: " + email);
+        
+        try {
+            const userCred = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCred.user;
+            
+            // Get user data from Firestore
+            const userDoc = await db.collection("users").doc(user.uid).get();
+            const userName = userDoc.exists ? userDoc.data().name : email.split('@')[0];
+            
+            currentUser = user;
+            document.getElementById("authSection").classList.add("hide");
+            document.getElementById("learningSection").classList.remove("hide");
+            document.getElementById("userNameDisplay").innerText = userName;
+            switchMode("amharic");
+            
+            showDebug("✅ Login successful! Welcome back " + userName + "!");
+        } catch(e) {
+            showDebug("❌ Login error: " + e.message, true);
+            alert("Login failed: " + e.message);
+        }
+    };
+    
+    // Logout
+    document.getElementById("logoutBtn").onclick = async () => {
+        await auth.signOut();
         currentUser = null;
         document.getElementById("authSection").classList.remove("hide");
         document.getElementById("learningSection").classList.add("hide");
-        document.getElementById("otpGroup").classList.add("hide");
+        document.getElementById("loginForm").classList.remove("hide");
+        document.getElementById("signupForm").classList.add("hide");
+        document.getElementById("loginEmail").value = "";
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("signupName").value = "";
+        document.getElementById("signupEmail").value = "";
+        document.getElementById("signupPassword").value = "";
+        document.getElementById("debugInfo").innerHTML = "";
+        showDebug("👋 Logged out successfully");
     };
     
+    // Mode switching buttons
     document.querySelectorAll(".mode-btn").forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
@@ -405,9 +715,21 @@
         };
     });
     
-    document.getElementById("nextBtn").onclick = () => loadNextQuestion();
+    // Next button handler
+    document.getElementById("nextBtn").onclick = () => {
+        loadNextQuestion();
+    };
     
-    showDebug("Tsehay Academy loaded! Firebase connected.");
+    // Check if user is already logged in
+    auth.onAuthStateChanged((user) => {
+        if (user && document.getElementById("authSection") && !document.getElementById("authSection").classList.contains("hide")) {
+            // Auto-redirect if already logged in
+            console.log("User already logged in:", user.email);
+        }
+    });
+    
+    showDebug("☀️ Tsehay Academy is ready! Sun is shining!");
+    showDebug("📧 Use Email/Password to create an account or login");
 </script>
 </body>
 </html>
