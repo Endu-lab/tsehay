@@ -328,7 +328,7 @@
     <div id="authSection">
         <div class="tsehay-logo">🌞 ጸሀይ 🌞</div>
         <h1>Tsehay Academy</h1>
-        <div style="text-align: center; margin-bottom: 20px;">🎵 Sounds • Full Family • Timer Challenge 🎵</div>
+        <div style="text-align: center; margin-bottom: 20px;">🎵 Sounds • Full Family • 20 Second Timer 🎵</div>
         
         <div id="loginForm">
             <div class="input-group">
@@ -386,7 +386,7 @@
         <div class="game-area">
             <div class="timer-container">
                 <div class="timer-ring">
-                    <div class="timer-number" id="timerDisplay">10</div>
+                    <div class="timer-number" id="timerDisplay">20</div>
                 </div>
                 <div class="timer-label">⏱️ Time Left</div>
                 <div class="bonus-display" id="bonusDisplay">⭐ Bonus: 0</div>
@@ -419,7 +419,6 @@
     // ======================= SOUND SYSTEM =======================
     let soundEnabled = false;
     
-    // Create audio contexts for web audio (works on all browsers)
     function playCheerSound() {
         if (!soundEnabled) return;
         try {
@@ -437,7 +436,6 @@
             gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
             oscillator.stop(audioContext.currentTime + 0.8);
             
-            // Second note
             setTimeout(() => {
                 const osc2 = audioContext.createOscillator();
                 const gain2 = audioContext.createGain();
@@ -469,7 +467,6 @@
             gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.5);
             oscillator.stop(audioContext.currentTime + 0.5);
             
-            // Descending sound for "wrong"
             setTimeout(() => {
                 const osc2 = audioContext.createOscillator();
                 const gain2 = audioContext.createGain();
@@ -568,7 +565,7 @@
     let currentOptions = [];
     let waitingForNext = false;
     let timerInterval = null;
-    let timeLeft = 10;
+    let timeLeft = 20;  // 🔥 CHANGED FROM 10 TO 20 SECONDS
     let currentBonus = 0;
     
     function stopTimer() {
@@ -580,7 +577,7 @@
     
     function startTimer() {
         stopTimer();
-        timeLeft = 10;
+        timeLeft = 20;  // 🔥 CHANGED FROM 10 TO 20 SECONDS
         updateTimerDisplay();
         
         timerInterval = setInterval(() => {
@@ -602,7 +599,7 @@
         const timerDiv = document.getElementById("timerDisplay");
         if (timerDiv) {
             timerDiv.innerText = timeLeft;
-            if (timeLeft <= 3) {
+            if (timeLeft <= 5) {  // Warning at 5 seconds instead of 3
                 timerDiv.style.color = "#c0392b";
             } else {
                 timerDiv.style.color = "#e67e22";
@@ -610,7 +607,7 @@
             
             const ring = document.querySelector(".timer-ring");
             if (ring) {
-                let degrees = (timeLeft / 10) * 360;
+                let degrees = (timeLeft / 20) * 360;  // 🔥 CHANGED FROM 10 TO 20
                 ring.style.background = `conic-gradient(#2e7d32 ${degrees}deg, #ffd966 ${degrees}deg)`;
             }
         }
@@ -657,7 +654,6 @@
         
         if (letters.length < 3) return null;
         
-        // Show 3-4 missing slots from the 7 letters
         let missingCount = Math.min(3 + Math.floor(Math.random() * 2), letters.length - 2);
         let startPos = Math.floor(Math.random() * (letters.length - missingCount - 1));
         
@@ -666,7 +662,6 @@
             currentCorrectAnswers.push(letters[startPos + i + 1]);
         }
         
-        // Build sequence
         currentSequence = [];
         for (let i = 0; i < letters.length && i < startPos + missingCount + 2; i++) {
             let isMissing = false;
@@ -682,7 +677,6 @@
             }
         }
         
-        // Generate options
         let wrongPool = [];
         for (let l of letters) {
             if (!currentCorrectAnswers.includes(l) && !currentSequence.some(s => s.type === "letter" && s.value === l)) {
@@ -769,7 +763,6 @@
     async function handleAnswer(element, selected) {
         if (waitingForNext) return;
         
-        // Find which missing slot this answer belongs to
         let matchedIndex = -1;
         for (let i = 0; i < currentCorrectAnswers.length; i++) {
             if (selected === currentCorrectAnswers[i]) {
@@ -779,14 +772,12 @@
         }
         
         if (matchedIndex === -1) {
-            // Wrong answer
             playWrongSound();
             await animateDrop(element);
             document.getElementById("feedbackMsg").innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ${selected} ትክክል አይደለም ❌</span>`;
             return;
         }
         
-        // Correct answer
         playCheerSound();
         const slots = document.querySelectorAll(".missing-slot");
         if (matchedIndex < slots.length) {
@@ -804,7 +795,6 @@
             document.getElementById("feedbackMsg").innerHTML = `<span class='correct'>✅ ትክክል! +${bonusPoints} bonus! 🎉</span>`;
             createConfetti();
             
-            // Check if all missing slots are filled
             let allFilled = true;
             slots.forEach(slot => {
                 if (slot.innerHTML === "___") allFilled = false;
@@ -924,10 +914,7 @@
         const btn = document.getElementById("enableSoundBtn");
         btn.innerHTML = "🔊 Sound ON! 🎵";
         btn.classList.add("sound-enabled");
-        
-        // Play a test sound
         playCheerSound();
-        
         setTimeout(() => {
             btn.innerHTML = "🔊 Sound Enabled";
         }, 1500);
@@ -1002,7 +989,7 @@
     
     document.getElementById("nextBtn").onclick = () => nextQuestion();
     
-    console.log("✅ Tsehay Academy with SOUNDS & FULL FAMILY!");
+    console.log("✅ Tsehay Academy with 20 SECOND TIMER! 🎵");
 </script>
 </body>
 </html>
