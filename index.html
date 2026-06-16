@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ጸሀይ ትምህርት - Tsehay Academy: Sounds & Full Family</title>
+    <title>ጸሀይ ትምህርት - Tsehay Academy: Beginner Friendly</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -58,6 +58,98 @@
 
         h1 { text-align: center; font-size: 1.8rem; color: #b45f06; }
         .tsehay-logo { text-align: center; font-size: 40px; margin: 8px 0; }
+        
+        /* Announcement Banner */
+        .announcement-banner {
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+            border-radius: 60px;
+            padding: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: scrollText 15s linear infinite;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 0 #000;
+            padding: 5px 0;
+        }
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .announcement-image {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .announcement-image img {
+            max-width: 100%;
+            max-height: 80px;
+            border-radius: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            background: #fff0d0;
+            border-radius: 40px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ffaa33;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            background: #ffdd99;
+            border-radius: 40px;
+        }
+        .admin-content {
+            margin-top: 15px;
+            display: none;
+        }
+        .admin-content.show {
+            display: block;
+        }
+        .admin-input-group {
+            margin-bottom: 12px;
+        }
+        .admin-input-group label {
+            font-size: 14px;
+        }
+        .admin-input-group input, .admin-input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid #ffaa33;
+            font-size: 14px;
+        }
+        .admin-btn {
+            background: #e67e22;
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .admin-password {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .admin-password input {
+            flex: 1;
+        }
         
         .input-group { margin-bottom: 20px; }
         label { font-weight: bold; display: block; margin-bottom: 8px; color: #7a4b03; }
@@ -115,9 +207,10 @@
         .sound-control {
             display: flex;
             justify-content: center;
+            gap: 10px;
             margin-bottom: 15px;
         }
-        .sound-btn {
+        .sound-btn, .admin-toggle-btn {
             background: #ffaa33;
             color: #5a3a01;
             padding: 8px 20px;
@@ -319,6 +412,7 @@
             .sequence-container { gap: 6px; }
             .timer-ring { width: 55px; height: 55px; }
             .timer-number { width: 45px; height: 45px; font-size: 22px; }
+            .marquee-content { font-size: 14px; }
         }
     </style>
 </head>
@@ -328,7 +422,7 @@
     <div id="authSection">
         <div class="tsehay-logo">🌞 ጸሀይ 🌞</div>
         <h1>Tsehay Academy</h1>
-        <div style="text-align: center; margin-bottom: 20px;">🎵 Sounds • Full Family • 20 Second Timer 🎵</div>
+        <div style="text-align: center; margin-bottom: 20px;">🎵 Beginner Friendly • One Family at a Time 🎵</div>
         
         <div id="loginForm">
             <div class="input-group">
@@ -362,6 +456,44 @@
     </div>
 
     <div id="learningSection" class="hide">
+        <!-- ANNOUNCEMENT BANNER -->
+        <div id="announcementBanner" class="announcement-banner" style="display: none;">
+            <div class="marquee">
+                <div class="marquee-content" id="marqueeText">🌟 Welcome to Tsehay Academy! 🌟</div>
+            </div>
+            <div class="announcement-image" id="announcementImage" style="display: none;">
+                <img id="bannerImage" src="" alt="Announcement">
+            </div>
+        </div>
+        
+        <!-- ADMIN PANEL -->
+        <div class="admin-panel">
+            <div class="admin-header" id="adminHeader">
+                <span>🔐 Admin Panel (Click to expand)</span>
+                <span>▼</span>
+            </div>
+            <div class="admin-content" id="adminContent">
+                <div class="admin-password" id="adminPasswordSection">
+                    <input type="password" id="adminPassword" placeholder="Enter Admin Password">
+                    <button id="unlockAdminBtn" style="width: auto; padding: 10px 20px;">Unlock</button>
+                </div>
+                <div id="adminControls" style="display: none;">
+                    <h4>📢 Manage Announcements</h4>
+                    <div class="admin-input-group">
+                        <label>Moving Text Message:</label>
+                        <input type="text" id="announcementText" placeholder="e.g., 🌟 Great job! Keep learning! 🌟">
+                    </div>
+                    <div class="admin-input-group">
+                        <label>Image URL (optional):</label>
+                        <input type="text" id="announcementImageUrl" placeholder="https://example.com/star.png">
+                        <small>Use emoji or image URL. Example star: ⭐</small>
+                    </div>
+                    <button id="saveAnnouncementBtn" class="admin-btn">📢 Publish Announcement</button>
+                    <button id="hideAnnouncementBtn" class="admin-btn" style="background: #999;">🔇 Hide Announcement</button>
+                </div>
+            </div>
+        </div>
+        
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <h2>☀️ ጤና ይስጥልኝ, <span id="userNameDisplay"></span>!</h2>
             <button id="logoutBtn" class="logout">🚪 Exit</button>
@@ -374,7 +506,7 @@
         </div>
         
         <div class="sound-control">
-            <button id="enableSoundBtn" class="sound-btn">🔊 Enable Sound & Start</button>
+            <button id="enableSoundBtn" class="sound-btn">🔊 Enable Sound</button>
         </div>
         
         <div class="stage-info">
@@ -392,7 +524,7 @@
                 <div class="bonus-display" id="bonusDisplay">⭐ Bonus: 0</div>
             </div>
             
-            <div style="font-size: 16px; margin-bottom: 10px;">🧠 Complete the FULL family sequence!</div>
+            <div style="font-size: 16px; margin-bottom: 10px;">🧠 Complete the sequence! (All letters from the same family)</div>
             <div class="sequence-container" id="sequenceContainer"></div>
             <div class="options" id="optionsContainer"></div>
             <div class="feedback" id="feedbackMsg"></div>
@@ -416,6 +548,9 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
+    // Admin password
+    const ADMIN_PASSWORD = "admin123";
+    
     // ======================= SOUND SYSTEM =======================
     let soundEnabled = false;
     
@@ -425,17 +560,13 @@
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
-            
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            
             oscillator.frequency.value = 880;
             gainNode.gain.value = 0.3;
-            
             oscillator.start();
             gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.8);
             oscillator.stop(audioContext.currentTime + 0.8);
-            
             setTimeout(() => {
                 const osc2 = audioContext.createOscillator();
                 const gain2 = audioContext.createGain();
@@ -456,17 +587,13 @@
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
-            
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            
             oscillator.frequency.value = 440;
             gainNode.gain.value = 0.3;
-            
             oscillator.start();
             gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.5);
             oscillator.stop(audioContext.currentTime + 0.5);
-            
             setTimeout(() => {
                 const osc2 = audioContext.createOscillator();
                 const gain2 = audioContext.createGain();
@@ -502,43 +629,84 @@
         } catch(e) {}
     }
     
-    // ======================= STAGE DATA =======================
+    // ======================= ANNOUNCEMENT SYSTEM =======================
+    async function loadAnnouncement() {
+        try {
+            const doc = await db.collection("settings").doc("announcement").get();
+            if (doc.exists) {
+                const data = doc.data();
+                if (data.show && data.text) {
+                    document.getElementById("announcementBanner").style.display = "block";
+                    document.getElementById("marqueeText").innerHTML = data.text;
+                    if (data.imageUrl && data.imageUrl.trim() !== "") {
+                        document.getElementById("announcementImage").style.display = "block";
+                        document.getElementById("bannerImage").src = data.imageUrl;
+                    } else {
+                        document.getElementById("announcementImage").style.display = "none";
+                    }
+                } else {
+                    document.getElementById("announcementBanner").style.display = "none";
+                }
+            }
+        } catch(e) { console.log("Error loading announcement:", e); }
+    }
+    
+    async function saveAnnouncement(text, imageUrl, show) {
+        try {
+            await db.collection("settings").doc("announcement").set({
+                text: text,
+                imageUrl: imageUrl,
+                show: show,
+                updatedAt: new Date().toISOString()
+            });
+            await loadAnnouncement();
+            alert("✅ Announcement published!");
+        } catch(e) { alert("Error: " + e.message); }
+    }
+    
+    async function hideAnnouncement() {
+        await saveAnnouncement("", "", false);
+    }
+    
+    // ======================= BEGINNER FRIENDLY STAGES (NO MIXING!) =======================
+    // Each stage is ONE family - children master ONE family at a time
     const AMHARIC_STAGES = [
-        { name: "ሀ ቤተሰብ", letters: ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"] },
-        { name: "ለ ቤተሰብ", letters: ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"] },
-        { name: "ሐ ቤተሰብ", letters: ["ሐ","ሑ","ሒ","ሓ","ሔ","ሕ","ሖ"] },
-        { name: "መ ቤተሰብ", letters: ["መ","ሙ","ሚ","ማ","ሜ","ም","ሞ"] },
-        { name: "ሠ ቤተሰብ", letters: ["ሠ","ሡ","ሢ","ሣ","ሤ","ሥ","ሦ"] },
-        { name: "ረ ቤተሰብ", letters: ["ረ","ሩ","ሪ","ራ","ሬ","ር","ሮ"] },
-        { name: "ሰ ቤተሰብ", letters: ["ሰ","ሱ","ሲ","ሳ","ሴ","ስ","ሶ"] },
-        { name: "ሸ ቤተሰብ", letters: ["ሸ","ሹ","ሺ","ሻ","ሼ","ሽ","ሾ"] },
-        { name: "ቀ ቤተሰብ", letters: ["ቀ","ቁ","ቂ","ቃ","ቄ","ቅ","ቆ"] },
-        { name: "በ ቤተሰብ", letters: ["በ","ቡ","ቢ","ባ","ቤ","ብ","ቦ"] },
-        { name: "ተ ቤተሰብ", letters: ["ተ","ቱ","ቲ","ታ","ቴ","ት","ቶ"] },
-        { name: "ቸ ቤተሰብ", letters: ["ቸ","ቹ","ቺ","ቻ","ቼ","ች","ቾ"] },
-        { name: "ኀ ቤተሰብ", letters: ["ኀ","ኁ","ኂ","ኃ","ኄ","ኅ","ኆ"] },
-        { name: "ነ ቤተሰብ", letters: ["ነ","ኑ","ኒ","ና","ኔ","ን","ኖ"] },
-        { name: "ኘ ቤተሰብ", letters: ["ኘ","ኙ","ኚ","ኛ","ኜ","ኝ","ኞ"] },
-        { name: "አ ቤተሰብ", letters: ["አ","ኡ","ኢ","ኣ","ኤ","እ","ኦ"] },
-        { name: "ከ ቤተሰብ", letters: ["ከ","ኩ","ኪ","ካ","ኬ","ክ","ኮ"] },
-        { name: "ኸ ቤተሰብ", letters: ["ኸ","ኹ","ኺ","ኻ","ኼ","ኽ","ኾ"] },
-        { name: "ወ ቤተሰብ", letters: ["ወ","ዉ","ዊ","ዋ","ዌ","ው","ዎ"] },
-        { name: "ዐ ቤተሰብ", letters: ["ዐ","ዑ","ዒ","ዓ","ዔ","ዕ","ዖ"] },
-        { name: "ዘ ቤተሰብ", letters: ["ዘ","ዙ","ዚ","ዛ","ዜ","ዝ","ዞ"] },
-        { name: "ዠ ቤተሰብ", letters: ["ዠ","ዡ","ዢ","ዣ","ዤ","ዥ","ዦ"] },
-        { name: "የ ቤተሰብ", letters: ["የ","ዩ","ዪ","ያ","ዬ","ይ","ዮ"] },
-        { name: "ደ ቤተሰብ", letters: ["ደ","ዱ","ዲ","ዳ","ዴ","ድ","ዶ"] },
-        { name: "ጀ ቤተሰብ", letters: ["ጀ","ጁ","ጂ","ጃ","ጄ","ጅ","ጆ"] },
-        { name: "ገ ቤተሰብ", letters: ["ገ","ጉ","ጊ","ጋ","ጌ","ግ","ጎ"] },
-        { name: "ጠ ቤተሰብ", letters: ["ጠ","ጡ","ጢ","ጣ","ጤ","ጥ","ጦ"] },
-        { name: "ጨ ቤተሰብ", letters: ["ጨ","ጩ","ጪ","ጫ","ጬ","ጭ","ጮ"] },
-        { name: "ጰ ቤተሰብ", letters: ["ጰ","ጱ","ጲ","ጳ","ጴ","ጵ","ጶ"] },
-        { name: "ጸ ቤተሰብ", letters: ["ጸ","ጹ","ጺ","ጻ","ጼ","ጽ","ጾ"] },
-        { name: "ፀ ቤተሰብ", letters: ["ፀ","ፁ","ፂ","ፃ","ፄ","ፅ","ፆ"] },
-        { name: "ፈ ቤተሰብ", letters: ["ፈ","ፉ","ፊ","ፋ","ፌ","ፍ","ፎ"] },
-        { name: "ፐ ቤተሰብ", letters: ["ፐ","ፑ","ፒ","ፓ","ፔ","ፕ","ፖ"] }
+        { name: "ሀ ቤተሰብ (ሀ ሁ ሂ ሃ ሄ ህ ሆ)", letters: ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"] },
+        { name: "ለ ቤተሰብ (ለ ሉ ሊ ላ ሌ ል ሎ)", letters: ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"] },
+        { name: "ሐ ቤተሰብ (ሐ ሑ ሒ ሓ ሔ ሕ ሖ)", letters: ["ሐ","ሑ","ሒ","ሓ","ሔ","ሕ","ሖ"] },
+        { name: "መ ቤተሰብ (መ ሙ ሚ ማ ሜ ም ሞ)", letters: ["መ","ሙ","ሚ","ማ","ሜ","ም","ሞ"] },
+        { name: "ሠ ቤተሰብ (ሠ ሡ ሢ ሣ ሤ ሥ ሦ)", letters: ["ሠ","ሡ","ሢ","ሣ","ሤ","ሥ","ሦ"] },
+        { name: "ረ ቤተሰብ (ረ ሩ ሪ ራ ሬ ር ሮ)", letters: ["ረ","ሩ","ሪ","ራ","ሬ","ር","ሮ"] },
+        { name: "ሰ ቤተሰብ (ሰ ሱ ሲ ሳ ሴ ስ ሶ)", letters: ["ሰ","ሱ","ሲ","ሳ","ሴ","ስ","ሶ"] },
+        { name: "ሸ ቤተሰብ (ሸ ሹ ሺ ሻ ሼ ሽ ሾ)", letters: ["ሸ","ሹ","ሺ","ሻ","ሼ","ሽ","ሾ"] },
+        { name: "ቀ ቤተሰብ (ቀ ቁ ቂ ቃ ቄ ቅ ቆ)", letters: ["ቀ","ቁ","ቂ","ቃ","ቄ","ቅ","ቆ"] },
+        { name: "በ ቤተሰብ (በ ቡ ቢ ባ ቤ ብ ቦ)", letters: ["በ","ቡ","ቢ","ባ","ቤ","ብ","ቦ"] },
+        { name: "ተ ቤተሰብ (ተ ቱ ቲ ታ ቴ ት ቶ)", letters: ["ተ","ቱ","ቲ","ታ","ቴ","ት","ቶ"] },
+        { name: "ቸ ቤተሰብ (ቸ ቹ ቺ ቻ ቼ ች ቾ)", letters: ["ቸ","ቹ","ቺ","ቻ","ቼ","ች","ቾ"] },
+        { name: "ኀ ቤተሰብ (ኀ ኁ ኂ ኃ ኄ ኅ ኆ)", letters: ["ኀ","ኁ","ኂ","ኃ","ኄ","ኅ","ኆ"] },
+        { name: "ነ ቤተሰብ (ነ ኑ ኒ ና ኔ ን ኖ)", letters: ["ነ","ኑ","ኒ","ና","ኔ","ን","ኖ"] },
+        { name: "ኘ ቤተሰብ (ኘ ኙ ኚ ኛ ኜ ኝ ኞ)", letters: ["ኘ","ኙ","ኚ","ኛ","ኜ","ኝ","ኞ"] },
+        { name: "አ ቤተሰብ (አ ኡ ኢ ኣ ኤ እ ኦ)", letters: ["አ","ኡ","ኢ","ኣ","ኤ","እ","ኦ"] },
+        { name: "ከ ቤተሰብ (ከ ኩ ኪ ካ ኬ ክ ኮ)", letters: ["ከ","ኩ","ኪ","ካ","ኬ","ክ","ኮ"] },
+        { name: "ኸ ቤተሰብ (ኸ ኹ ኺ ኻ ኼ ኽ ኾ)", letters: ["ኸ","ኹ","ኺ","ኻ","ኼ","ኽ","ኾ"] },
+        { name: "ወ ቤተሰብ (ወ ዉ ዊ ዋ ዌ ው ዎ)", letters: ["ወ","ዉ","ዊ","ዋ","ዌ","ው","ዎ"] },
+        { name: "ዐ ቤተሰብ (ዐ ዑ ዒ ዓ ዔ ዕ ዖ)", letters: ["ዐ","ዑ","ዒ","ዓ","ዔ","ዕ","ዖ"] },
+        { name: "ዘ ቤተሰብ (ዘ ዙ ዚ ዛ ዜ ዝ ዞ)", letters: ["ዘ","ዙ","ዚ","ዛ","ዜ","ዝ","ዞ"] },
+        { name: "ዠ ቤተሰብ (ዠ ዡ ዢ ዣ ዤ ዥ ዦ)", letters: ["ዠ","ዡ","ዢ","ዣ","ዤ","ዥ","ዦ"] },
+        { name: "የ ቤተሰብ (የ ዩ ዪ ያ ዬ ይ ዮ)", letters: ["የ","ዩ","ዪ","ያ","ዬ","ይ","ዮ"] },
+        { name: "ደ ቤተሰብ (ደ ዱ ዲ ዳ ዴ ድ ዶ)", letters: ["ደ","ዱ","ዲ","ዳ","ዴ","ድ","ዶ"] },
+        { name: "ጀ ቤተሰብ (ጀ ጁ ጂ ጃ ጄ ጅ ጆ)", letters: ["ጀ","ጁ","ጂ","ጃ","ጄ","ጅ","ጆ"] },
+        { name: "ገ ቤተሰብ (ገ ጉ ጊ ጋ ጌ ግ ጎ)", letters: ["ገ","ጉ","ጊ","ጋ","ጌ","ግ","ጎ"] },
+        { name: "ጠ ቤተሰብ (ጠ ጡ ጢ ጣ ጤ ጥ ጦ)", letters: ["ጠ","ጡ","ጢ","ጣ","ጤ","ጥ","ጦ"] },
+        { name: "ጨ ቤተሰብ (ጨ ጩ ጪ ጫ ጬ ጭ ጮ)", letters: ["ጨ","ጩ","ጪ","ጫ","ጬ","ጭ","ጮ"] },
+        { name: "ጰ ቤተሰብ (ጰ ጱ ጲ ጳ ጴ ጵ ጶ)", letters: ["ጰ","ጱ","ጲ","ጳ","ጴ","ጵ","ጶ"] },
+        { name: "ጸ ቤተሰብ (ጸ ጹ ጺ ጻ ጼ ጽ ጾ)", letters: ["ጸ","ጹ","ጺ","ጻ","ጼ","ጽ","ጾ"] },
+        { name: "ፀ ቤተሰብ (ፀ ፁ ፂ ፃ ፄ ፅ ፆ)", letters: ["ፀ","ፁ","ፂ","ፃ","ፄ","ፅ","ፆ"] },
+        { name: "ፈ ቤተሰብ (ፈ ፉ ፊ ፋ ፌ ፍ ፎ)", letters: ["ፈ","ፉ","ፊ","ፋ","ፌ","ፍ","ፎ"] },
+        { name: "ፐ ቤተሰብ (ፐ ፑ ፒ ፓ ፔ ፕ ፖ)", letters: ["ፐ","ፑ","ፒ","ፓ","ፔ","ፕ","ፖ"] }
     ];
     
+    // English - each stage is a small group
     const ENGLISH_STAGES = [
         { name: "A B C D E F G", letters: ["A","B","C","D","E","F","G"] },
         { name: "H I J K L M N", letters: ["H","I","J","K","L","M","N"] },
@@ -546,6 +714,7 @@
         { name: "V W X Y Z", letters: ["V","W","X","Y","Z"] }
     ];
     
+    // Numbers - each stage is 10 numbers
     const NUMBERS_STAGES = [];
     for (let i = 1; i <= 1000; i += 10) {
         let end = Math.min(i + 9, 1000);
@@ -565,7 +734,7 @@
     let currentOptions = [];
     let waitingForNext = false;
     let timerInterval = null;
-    let timeLeft = 20;  // 🔥 CHANGED FROM 10 TO 20 SECONDS
+    let timeLeft = 20;
     let currentBonus = 0;
     
     function stopTimer() {
@@ -577,19 +746,16 @@
     
     function startTimer() {
         stopTimer();
-        timeLeft = 20;  // 🔥 CHANGED FROM 10 TO 20 SECONDS
+        timeLeft = 20;
         updateTimerDisplay();
         
         timerInterval = setInterval(() => {
             if (!waitingForNext) {
                 timeLeft--;
                 updateTimerDisplay();
-                
                 if (timeLeft <= 0) {
                     stopTimer();
-                    if (!waitingForNext) {
-                        autoTimeout();
-                    }
+                    if (!waitingForNext) autoTimeout();
                 }
             }
         }, 1000);
@@ -599,15 +765,11 @@
         const timerDiv = document.getElementById("timerDisplay");
         if (timerDiv) {
             timerDiv.innerText = timeLeft;
-            if (timeLeft <= 5) {  // Warning at 5 seconds instead of 3
-                timerDiv.style.color = "#c0392b";
-            } else {
-                timerDiv.style.color = "#e67e22";
-            }
-            
+            if (timeLeft <= 5) timerDiv.style.color = "#c0392b";
+            else timerDiv.style.color = "#e67e22";
             const ring = document.querySelector(".timer-ring");
             if (ring) {
-                let degrees = (timeLeft / 20) * 360;  // 🔥 CHANGED FROM 10 TO 20
+                let degrees = (timeLeft / 20) * 360;
                 ring.style.background = `conic-gradient(#2e7d32 ${degrees}deg, #ffd966 ${degrees}deg)`;
             }
         }
@@ -615,10 +777,8 @@
     
     function autoTimeout() {
         playWrongSound();
-        const feedbackDiv = document.getElementById("feedbackMsg");
-        feedbackDiv.innerHTML = "<span class='wrong'>⏰ Time's up! The correct answers are shown below.</span>";
+        document.getElementById("feedbackMsg").innerHTML = "<span class='wrong'>⏰ Time's up! Look at the correct answers above.</span>";
         waitingForNext = true;
-        
         const slots = document.querySelectorAll(".missing-slot");
         slots.forEach((slot, idx) => {
             if (idx < currentCorrectAnswers.length) {
@@ -626,11 +786,7 @@
                 slot.classList.add("filled");
             }
         });
-        
-        document.querySelectorAll(".option").forEach(opt => {
-            opt.classList.add("disabled");
-        });
-        
+        document.querySelectorAll(".option").forEach(opt => opt.classList.add("disabled"));
         stopTimer();
     }
     
@@ -648,13 +804,14 @@
         }
     }
     
+    // Generate question using ONLY current family letters (NO MIXING!)
     function generateQuestion() {
         const stage = currentStages[currentStageIndex];
         const letters = stage.letters;
-        
         if (letters.length < 3) return null;
         
-        let missingCount = Math.min(3 + Math.floor(Math.random() * 2), letters.length - 2);
+        // Show 2-4 missing slots from this family only
+        let missingCount = Math.min(2 + Math.floor(Math.random() * 3), letters.length - 2);
         let startPos = Math.floor(Math.random() * (letters.length - missingCount - 1));
         
         currentCorrectAnswers = [];
@@ -662,6 +819,7 @@
             currentCorrectAnswers.push(letters[startPos + i + 1]);
         }
         
+        // Build sequence with missing slots
         currentSequence = [];
         for (let i = 0; i < letters.length && i < startPos + missingCount + 2; i++) {
             let isMissing = false;
@@ -677,6 +835,7 @@
             }
         }
         
+        // WRONG ANSWERS: ONLY from the SAME family (no mixing!)
         let wrongPool = [];
         for (let l of letters) {
             if (!currentCorrectAnswers.includes(l) && !currentSequence.some(s => s.type === "letter" && s.value === l)) {
@@ -684,19 +843,24 @@
             }
         }
         
-        if (currentStageIndex > 0) {
-            currentStages[currentStageIndex - 1].letters.forEach(l => {
-                if (!wrongPool.includes(l) && !currentCorrectAnswers.includes(l)) wrongPool.push(l);
-            });
+        // If not enough wrong answers from same family, duplicate some (but stay in family)
+        while (wrongPool.length < 4 && letters.length > 0) {
+            for (let l of letters) {
+                if (!wrongPool.includes(l) && !currentCorrectAnswers.includes(l)) {
+                    wrongPool.push(l);
+                }
+            }
         }
         
         let shuffledWrong = [...wrongPool].sort(() => Math.random() - 0.5);
-        let wrongs = shuffledWrong.slice(0, 6);
+        let wrongs = shuffledWrong.slice(0, 5);
         
         let allOptions = [...currentCorrectAnswers];
         for (let w of wrongs) {
             if (!allOptions.includes(w)) allOptions.push(w);
         }
+        
+        // Shuffle options
         for (let i = allOptions.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
             [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
@@ -717,7 +881,7 @@
         const container = document.getElementById("sequenceContainer");
         container.innerHTML = "";
         
-        currentSequence.forEach((item, idx) => {
+        currentSequence.forEach((item) => {
             if (item.type === "letter") {
                 const div = document.createElement("div");
                 div.className = "letter-card";
@@ -747,7 +911,6 @@
         waitingForNext = false;
         currentBonus = 0;
         document.getElementById("bonusDisplay").innerHTML = "⭐ Bonus: 0";
-        
         startTimer();
         
         const stage = currentStages[currentStageIndex];
@@ -774,7 +937,7 @@
         if (matchedIndex === -1) {
             playWrongSound();
             await animateDrop(element);
-            document.getElementById("feedbackMsg").innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ${selected} ትክክል አይደለም ❌</span>`;
+            document.getElementById("feedbackMsg").innerHTML = `<span class='wrong'>❌ ተሳስተሃል! "${selected}" ትክክል አይደለም. እንደገና ሞክር! ❌</span>`;
             return;
         }
         
@@ -791,7 +954,6 @@
             let bonusPoints = timeLeft;
             currentBonus += bonusPoints;
             document.getElementById("bonusDisplay").innerHTML = `⭐ Bonus: ${currentBonus}`;
-            
             document.getElementById("feedbackMsg").innerHTML = `<span class='correct'>✅ ትክክል! +${bonusPoints} bonus! 🎉</span>`;
             createConfetti();
             
@@ -815,29 +977,27 @@
                 
                 if (stageMastery[stageKey] >= totalLetters) {
                     if (currentStageIndex + 1 < currentStages.length) {
-                        document.getElementById("feedbackMsg").innerHTML += `<br><span class='correct'>🎉 Derja ${currentStageIndex + 1} ጨረስክ! ወደ ቀጣይ ደረጃ! 🎉</span>`;
+                        document.getElementById("feedbackMsg").innerHTML += `<br><span class='correct'>🎉 Derja ${currentStageIndex + 1} ጨረስክ! ወደ ቀጣይ ቤተሰብ! 🎉</span>`;
                         currentStageIndex++;
                         const newStageKey = `${currentMode}_stage_${currentStageIndex}`;
                         if (!stageMastery[newStageKey]) stageMastery[newStageKey] = 0;
                     } else {
-                        document.getElementById("feedbackMsg").innerHTML += `<br><span class='correct'>🏆 ኮንግራትዩሌሽን! ሁሉንም ጨረስክ! 🏆</span>`;
+                        document.getElementById("feedbackMsg").innerHTML += `<br><span class='correct'>🏆 ኮንግራትዩሌሽን! ሁሉንም ቤተሰቦች ጨረስክ! 🏆</span>`;
                     }
                 }
                 
                 if (currentUser) {
                     try {
-                        db.collection("users").doc(currentUser.uid).set({
+                        await db.collection("users").doc(currentUser.uid).set({
                             [`progress.${currentMode}.stage`]: currentStageIndex,
                             [`progress.${currentMode}.mastery`]: stageMastery,
                             lastActive: new Date().toISOString()
                         }, { merge: true });
-                    } catch(e) {}
+                    } catch(e) { console.log("Save error:", e); }
                 }
                 
                 waitingForNext = true;
-                document.querySelectorAll(".option").forEach(opt => {
-                    opt.classList.add("disabled");
-                });
+                document.querySelectorAll(".option").forEach(opt => opt.classList.add("disabled"));
                 stopTimer();
             }
         }
@@ -846,10 +1006,8 @@
     async function animateFly(element, targetElement) {
         const rect = element.getBoundingClientRect();
         const targetRect = targetElement.getBoundingClientRect();
-        
         const deltaX = targetRect.left + targetRect.width/2 - (rect.left + rect.width/2);
         const deltaY = targetRect.top + targetRect.height/2 - (rect.top + rect.height/2);
-        
         const flying = document.createElement("div");
         flying.className = "flying";
         flying.innerText = element.innerText;
@@ -859,13 +1017,9 @@
         flying.style.setProperty("--target-x", deltaX + "px");
         flying.style.setProperty("--target-y", deltaY + "px");
         document.body.appendChild(flying);
-        
         element.style.opacity = "0";
         element.style.pointerEvents = "none";
-        
-        setTimeout(() => {
-            flying.remove();
-        }, 600);
+        setTimeout(() => flying.remove(), 600);
     }
     
     async function animateDrop(element) {
@@ -877,13 +1031,9 @@
         dropping.style.top = rect.top + "px";
         dropping.style.position = "fixed";
         document.body.appendChild(dropping);
-        
         element.style.opacity = "0";
         element.style.pointerEvents = "none";
-        
-        setTimeout(() => {
-            dropping.remove();
-        }, 500);
+        setTimeout(() => dropping.remove(), 500);
     }
     
     function nextQuestion() {
@@ -893,9 +1043,13 @@
     
     function switchMode(mode) {
         currentMode = mode;
-        if (mode === "amharic") currentStages = AMHARIC_STAGES;
-        else if (mode === "english") currentStages = ENGLISH_STAGES;
-        else currentStages = NUMBERS_STAGES;
+        if (mode === "amharic") {
+            currentStages = AMHARIC_STAGES;
+        } else if (mode === "english") {
+            currentStages = ENGLISH_STAGES;
+        } else {
+            currentStages = NUMBERS_STAGES;
+        }
         
         currentStageIndex = 0;
         if (currentUser && window.userProgress && window.userProgress[mode]) {
@@ -908,6 +1062,33 @@
         renderGame();
     }
     
+    // Admin Panel
+    let adminUnlocked = false;
+    document.getElementById("adminHeader").onclick = () => {
+        const content = document.getElementById("adminContent");
+        content.classList.toggle("show");
+    };
+    document.getElementById("unlockAdminBtn").onclick = () => {
+        const pwd = document.getElementById("adminPassword").value;
+        if (pwd === ADMIN_PASSWORD) {
+            adminUnlocked = true;
+            document.getElementById("adminPasswordSection").style.display = "none";
+            document.getElementById("adminControls").style.display = "block";
+            alert("✅ Admin mode unlocked!");
+        } else { alert("❌ Wrong password!"); }
+    };
+    document.getElementById("saveAnnouncementBtn").onclick = async () => {
+        if (!adminUnlocked) { alert("Please unlock admin first!"); return; }
+        const text = document.getElementById("announcementText").value;
+        const imageUrl = document.getElementById("announcementImageUrl").value;
+        if (!text) { alert("Please enter a message"); return; }
+        await saveAnnouncement(text, imageUrl, true);
+    };
+    document.getElementById("hideAnnouncementBtn").onclick = async () => {
+        if (!adminUnlocked) { alert("Please unlock admin first!"); return; }
+        await hideAnnouncement();
+    };
+    
     // Enable Sound
     document.getElementById("enableSoundBtn").onclick = () => {
         soundEnabled = true;
@@ -915,12 +1096,10 @@
         btn.innerHTML = "🔊 Sound ON! 🎵";
         btn.classList.add("sound-enabled");
         playCheerSound();
-        setTimeout(() => {
-            btn.innerHTML = "🔊 Sound Enabled";
-        }, 1500);
+        setTimeout(() => { btn.innerHTML = "🔊 Sound Enabled"; }, 1500);
     };
     
-    // ======================= AUTHENTICATION =======================
+    // Authentication
     document.getElementById("showSignup").onclick = () => {
         document.getElementById("loginForm").classList.add("hide");
         document.getElementById("signupForm").classList.remove("hide");
@@ -947,6 +1126,7 @@
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
+            await loadAnnouncement();
             renderGame();
         } catch(e) { alert("Signup error: " + e.message); }
     };
@@ -965,6 +1145,7 @@
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
+            await loadAnnouncement();
             renderGame();
         } catch(e) { alert("Login failed: " + e.message); }
     };
@@ -989,7 +1170,9 @@
     
     document.getElementById("nextBtn").onclick = () => nextQuestion();
     
-    console.log("✅ Tsehay Academy with 20 SECOND TIMER! 🎵");
+    console.log("✅ Tsehay Academy - BEGINNER FRIENDLY! No mixing of families!");
+    console.log("✅ Each Derja teaches ONE Amharic family at a time!");
+    console.log("✅ Admin password: admin123");
 </script>
 </body>
 </html>
