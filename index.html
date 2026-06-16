@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>ጸሀይ ትምህርት - Tsehay Learning: Drag & Drop Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ጸሀይ ትምህርት - Tsehay Academy: Stage Learning (Derja)</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -14,26 +14,23 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', 'Comic Neue', 'Noto Sans Ethiopic', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', 'Noto Sans Ethiopic', system-ui, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f9a826 0%, #fdd97a 50%, #ffefb5 100%);
             position: relative;
-            overflow-x: hidden;
             padding: 20px;
         }
 
-        /* 🌞 RISING SUN ANIMATION */
         .sun {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             background: radial-gradient(circle, #ffdd77, #ffaa33);
             border-radius: 50%;
             box-shadow: 0 0 60px #ffaa44;
@@ -50,113 +47,139 @@
         .container {
             position: relative;
             z-index: 2;
-            max-width: 800px;
+            max-width: 750px;
             margin: 0 auto;
             background: rgba(255, 248, 225, 0.96);
-            border-radius: 64px;
-            padding: 24px;
+            border-radius: 48px;
+            padding: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        h1 { text-align: center; font-size: 2rem; color: #b45f06; margin-bottom: 8px; }
-        .tsehay-logo { text-align: center; font-size: 48px; margin: 8px 0; }
+        h1 { text-align: center; font-size: 1.8rem; color: #b45f06; }
+        .tsehay-logo { text-align: center; font-size: 40px; margin: 8px 0; }
+        
         .input-group { margin-bottom: 20px; }
         label { font-weight: bold; display: block; margin-bottom: 8px; color: #7a4b03; }
         input { width: 100%; padding: 14px; border-radius: 60px; border: 2px solid #ffc857; font-size: 16px; background: white; }
         button { background: #f39c12; color: white; border: none; padding: 14px 20px; border-radius: 60px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px; }
+        
         .mode-buttons { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
-        .mode-btn { flex: 1; background: #ffd966; color: #5a3a01; font-size: 14px; padding: 12px; cursor: pointer; }
+        .mode-btn { flex: 1; background: #ffd966; color: #5a3a01; font-size: 14px; padding: 12px; text-align: center; cursor: pointer; border-radius: 40px; }
         .mode-btn.active { background: #e67e22; color: white; }
-        .game-area { background: #fff6e5; border-radius: 48px; padding: 20px; text-align: center; border: 3px solid #ffcc77; }
-        .question-card { font-size: 100px; background: #ffefcf; display: inline-block; padding: 30px 50px; border-radius: 60px; margin: 10px; font-weight: bold; box-shadow: inset 0 -2px 0 #ddb56b; }
+        
+        .stage-info {
+            background: #ffefcf;
+            border-radius: 40px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stage-badge {
+            background: #e67e22;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 20px;
+            background: #ffd966;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #2e7d32;
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 20px;
+        }
+        
+        .game-area {
+            background: #fff6e5;
+            border-radius: 48px;
+            padding: 25px;
+            text-align: center;
+            border: 3px solid #ffcc77;
+        }
+        
+        .sequence-pattern {
+            font-size: 60px;
+            background: #ffefcf;
+            padding: 30px;
+            border-radius: 60px;
+            margin: 15px 0;
+            font-weight: bold;
+            letter-spacing: 20px;
+        }
+        
+        .missing-spot {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            background: #ffe0a3;
+            border-radius: 20px;
+            margin: 0 10px;
+            vertical-align: middle;
+            line-height: 80px;
+            text-align: center;
+            font-size: 50px;
+            color: #e67e22;
+        }
+        
         .options {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            min-height: 150px;
+            gap: 15px;
+            margin: 25px 0;
         }
+        
         .option {
             background: #fffaec;
-            padding: 20px 30px;
+            padding: 15px 25px;
             border-radius: 60px;
-            font-size: 48px;
-            cursor: grab;
-            min-width: 100px;
+            font-size: 40px;
+            cursor: pointer;
+            min-width: 90px;
             text-align: center;
             font-weight: bold;
             border: 3px solid #ffbb55;
-            transition: all 0.1s ease;
-            touch-action: none;
+            transition: 0.1s;
         }
-        .option:active { cursor: grabbing; }
-        .option.dragging {
-            opacity: 0.5;
-            cursor: grabbing;
-        }
-        .option.drag-over {
-            border: 3px dashed #e67e22;
-            background: #ffe0a3;
-            transform: scale(1.05);
-        }
-        .answer-zone {
-            background: #ffefcf;
-            border: 3px dashed #ffaa33;
-            border-radius: 60px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 300px;
-            transition: all 0.2s;
-        }
-        .answer-zone.drag-over {
-            background: #ffe0a3;
-            border: 3px solid #e67e22;
-            transform: scale(1.02);
-        }
-        .answer-placeholder {
-            font-size: 36px;
-            color: #999;
-            text-align: center;
-        }
-        .selected-answer {
-            font-size: 48px;
-            font-weight: bold;
-            text-align: center;
-            padding: 15px;
-        }
-        .feedback { margin-top: 20px; font-size: 24px; font-weight: bold; min-height: 70px; }
+        .option:active { transform: scale(0.95); background: #ffe0a3; }
+        .option.disabled { opacity: 0.5; pointer-events: none; }
+        
+        .feedback { margin: 15px 0; font-size: 24px; font-weight: bold; min-height: 70px; }
         .correct { color: #2b7a2b; }
         .wrong { color: #c0392b; }
-        .progress { font-size: 18px; background: #ffefcf; border-radius: 40px; padding: 10px; margin-top: 16px; }
-        .hide { display: none; }
+        
+        .next-btn { background: #2e7d32; margin-top: 10px; }
         .logout { background: #c0392b; width: auto; padding: 8px 16px; margin-top: 0; }
         .auth-toggle { text-align: center; margin-top: 15px; color: #7a4b03; cursor: pointer; }
         .auth-toggle span { text-decoration: underline; font-weight: bold; }
         
-        @media (max-width: 600px) {
-            .question-card { font-size: 60px; padding: 20px 30px; }
-            .option { font-size: 36px; padding: 12px 20px; min-width: 80px; }
-            .selected-answer { font-size: 36px; }
-        }
+        .hide { display: none; }
         
-        .instruction {
-            background: #ffe0a3;
-            padding: 10px;
-            border-radius: 40px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: #7a4b03;
+        @media (max-width: 550px) {
+            .sequence-pattern { font-size: 35px; letter-spacing: 10px; padding: 20px; }
+            .option { font-size: 30px; padding: 10px 18px; min-width: 70px; }
         }
     </style>
 </head>
 <body>
 <div class="sun"></div>
 <div class="container" id="app">
+    <!-- AUTH SECTION -->
     <div id="authSection">
         <div class="tsehay-logo">🌞 ጸሀይ 🌞</div>
         <h1>Tsehay Academy</h1>
-        <div style="text-align: center; margin-bottom: 20px;">Drag & Drop Learning • Amharic 7 Orders • English • Numbers 1-1000</div>
+        <div style="text-align: center; margin-bottom: 20px;">Stage Learning • Derja • Sequential Mastery</div>
         
         <div id="loginForm">
             <div class="input-group">
@@ -189,36 +212,37 @@
         </div>
     </div>
 
+    <!-- LEARNING SECTION -->
     <div id="learningSection" class="hide">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <h2>☀️ ጤና ይስጥልኝ, <span id="userNameDisplay"></span>!</h2>
             <button id="logoutBtn" class="logout">🚪 Exit</button>
         </div>
+        
         <div class="mode-buttons">
-            <button data-mode="amharic" class="mode-btn active">🇪🇹 አማርኛ (7 ቅደም)</button>
+            <button data-mode="amharic" class="mode-btn active">🇪🇹 አማርኛ (7 Orders)</button>
             <button data-mode="english" class="mode-btn">🔤 English ABC</button>
             <button data-mode="numbers" class="mode-btn">🔢 ቁጥር 1-1000</button>
         </div>
+        
+        <div class="stage-info">
+            <div class="stage-badge" id="stageDisplay">Derja 1</div>
+            <div class="progress-bar"><div class="progress-fill" id="stageProgress"></div></div>
+            <div style="font-weight: bold;" id="masteryDisplay">⭐ 0% Mastered</div>
+        </div>
+        
         <div class="game-area">
-            <div class="instruction">
-                ✨ DRAG the correct answer to the yellow box below! ✨
-            </div>
-            <div class="question-card" id="currentQuestion">?</div>
-            
-            <div class="answer-zone" id="answerZone">
-                <div class="answer-placeholder" id="answerPlaceholder">⬅️ Drag answer here</div>
-                <div class="selected-answer hide" id="selectedAnswer"></div>
-            </div>
-            
+            <div style="font-size: 16px; margin-bottom: 10px;">🧠 Complete the sequence / ቅደሙን ሙላ</div>
+            <div class="sequence-pattern" id="sequencePattern">ሀ ___ ሂ</div>
             <div class="options" id="optionsContainer"></div>
             <div class="feedback" id="feedbackMsg"></div>
-            <div class="progress" id="progressTracker">⭐ Streak: 0 | ✅ Total: 0 ⭐</div>
-            <button id="nextBtn" style="background: #2e7d32; margin-top: 16px;">✨ Next Question ✨</button>
+            <button id="nextBtn" class="next-btn">✨ Next Question ✨</button>
         </div>
     </div>
 </div>
 
 <script>
+    // ======================= FIREBASE CONFIG =======================
     const firebaseConfig = {
         apiKey: "AIzaSyCxZFWBiuWqK73EUMznAlySXrsC1EPb1BE",
         authDomain: "tsehay-academy.firebaseapp.com",
@@ -232,263 +256,241 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    // ======================= COMPLETE AMHARIC 7 ORDERS =======================
-    const amharicFamilyMap = {
-        "ሀ": ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"],
-        "ለ": ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"],
-        "ሐ": ["ሐ","ሑ","ሒ","ሓ","ሔ","ሕ","ሖ"],
-        "መ": ["መ","ሙ","ሚ","ማ","ሜ","ም","ሞ"],
-        "ሠ": ["ሠ","ሡ","ሢ","ሣ","ሤ","ሥ","ሦ"],
-        "ረ": ["ረ","ሩ","ሪ","ራ","ሬ","ር","ሮ"],
-        "ሰ": ["ሰ","ሱ","ሲ","ሳ","ሴ","ስ","ሶ"],
-        "ሸ": ["ሸ","ሹ","ሺ","ሻ","ሼ","ሽ","ሾ"],
-        "ቀ": ["ቀ","ቁ","ቂ","ቃ","ቄ","ቅ","ቆ"],
-        "በ": ["በ","ቡ","ቢ","ባ","ቤ","ብ","ቦ"],
-        "ተ": ["ተ","ቱ","ቲ","ታ","ቴ","ት","ቶ"],
-        "ቸ": ["ቸ","ቹ","ቺ","ቻ","ቼ","ች","ቾ"],
-        "ኀ": ["ኀ","ኁ","ኂ","ኃ","ኄ","ኅ","ኆ"],
-        "ነ": ["ነ","ኑ","ኒ","ና","ኔ","ን","ኖ"],
-        "ኘ": ["ኘ","ኙ","ኚ","ኛ","ኜ","ኝ","ኞ"],
-        "አ": ["አ","ኡ","ኢ","ኣ","ኤ","እ","ኦ"],
-        "ከ": ["ከ","ኩ","ኪ","ካ","ኬ","ክ","ኮ"],
-        "ኸ": ["ኸ","ኹ","ኺ","ኻ","ኼ","ኽ","ኾ"],
-        "ወ": ["ወ","ዉ","ዊ","ዋ","ዌ","ው","ዎ"],
-        "ዐ": ["ዐ","ዑ","ዒ","ዓ","ዔ","ዕ","ዖ"],
-        "ዘ": ["ዘ","ዙ","ዚ","ዛ","ዜ","ዝ","ዞ"],
-        "ዠ": ["ዠ","ዡ","ዢ","ዣ","ዤ","ዥ","ዦ"],
-        "የ": ["የ","ዩ","ዪ","ያ","ዬ","ይ","ዮ"],
-        "ደ": ["ደ","ዱ","ዲ","ዳ","ዴ","ድ","ዶ"],
-        "ጀ": ["ጀ","ጁ","ጂ","ጃ","ጄ","ጅ","ጆ"],
-        "ገ": ["ገ","ጉ","ጊ","ጋ","ጌ","ግ","ጎ"],
-        "ጠ": ["ጠ","ጡ","ጢ","ጣ","ጤ","ጥ","ጦ"],
-        "ጨ": ["ጨ","ጩ","ጪ","ጫ","ጬ","ጭ","ጮ"],
-        "ጰ": ["ጰ","ጱ","ጲ","ጳ","ጴ","ጵ","ጶ"],
-        "ጸ": ["ጸ","ጹ","ጺ","ጻ","ጼ","ጽ","ጾ"],
-        "ፀ": ["ፀ","ፁ","ፂ","ፃ","ፄ","ፅ","ፆ"],
-        "ፈ": ["ፈ","ፉ","ፊ","ፋ","ፌ","ፍ","ፎ"],
-        "ፐ": ["ፐ","ፑ","ፒ","ፓ","ፔ","ፕ","ፖ"]
-    };
+    // ======================= STAGE DATA =======================
+    // Amharic: Each stage = one family (7 letters)
+    const AMHARIC_STAGES = [
+        { name: "ሀ ቤተሰብ", letters: ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"] },
+        { name: "ለ ቤተሰብ", letters: ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"] },
+        { name: "ሐ ቤተሰብ", letters: ["ሐ","ሑ","ሒ","ሓ","ሔ","ሕ","ሖ"] },
+        { name: "መ ቤተሰብ", letters: ["መ","ሙ","ሚ","ማ","ሜ","ም","ሞ"] },
+        { name: "ሠ ቤተሰብ", letters: ["ሠ","ሡ","ሢ","ሣ","ሤ","ሥ","ሦ"] },
+        { name: "ረ ቤተሰብ", letters: ["ረ","ሩ","ሪ","ራ","ሬ","ር","ሮ"] },
+        { name: "ሰ ቤተሰብ", letters: ["ሰ","ሱ","ሲ","ሳ","ሴ","ስ","ሶ"] },
+        { name: "ሸ ቤተሰብ", letters: ["ሸ","ሹ","ሺ","ሻ","ሼ","ሽ","ሾ"] },
+        { name: "ቀ ቤተሰብ", letters: ["ቀ","ቁ","ቂ","ቃ","ቄ","ቅ","ቆ"] },
+        { name: "በ ቤተሰብ", letters: ["በ","ቡ","ቢ","ባ","ቤ","ብ","ቦ"] },
+        { name: "ተ ቤተሰብ", letters: ["ተ","ቱ","ቲ","ታ","ቴ","ት","ቶ"] },
+        { name: "ቸ ቤተሰብ", letters: ["ቸ","ቹ","ቺ","ቻ","ቼ","ች","ቾ"] },
+        { name: "ኀ ቤተሰብ", letters: ["ኀ","ኁ","ኂ","ኃ","ኄ","ኅ","ኆ"] },
+        { name: "ነ ቤተሰብ", letters: ["ነ","ኑ","ኒ","ና","ኔ","ን","ኖ"] },
+        { name: "ኘ ቤተሰብ", letters: ["ኘ","ኙ","ኚ","ኛ","ኜ","ኝ","ኞ"] },
+        { name: "አ ቤተሰብ", letters: ["አ","ኡ","ኢ","ኣ","ኤ","እ","ኦ"] },
+        { name: "ከ ቤተሰብ", letters: ["ከ","ኩ","ኪ","ካ","ኬ","ክ","ኮ"] },
+        { name: "ኸ ቤተሰብ", letters: ["ኸ","ኹ","ኺ","ኻ","ኼ","ኽ","ኾ"] },
+        { name: "ወ ቤተሰብ", letters: ["ወ","ዉ","ዊ","ዋ","ዌ","ው","ዎ"] },
+        { name: "ዐ ቤተሰብ", letters: ["ዐ","ዑ","ዒ","ዓ","ዔ","ዕ","ዖ"] },
+        { name: "ዘ ቤተሰብ", letters: ["ዘ","ዙ","ዚ","ዛ","ዜ","ዝ","ዞ"] },
+        { name: "ዠ ቤተሰብ", letters: ["ዠ","ዡ","ዢ","ዣ","ዤ","ዥ","ዦ"] },
+        { name: "የ ቤተሰብ", letters: ["የ","ዩ","ዪ","ያ","ዬ","ይ","ዮ"] },
+        { name: "ደ ቤተሰብ", letters: ["ደ","ዱ","ዲ","ዳ","ዴ","ድ","ዶ"] },
+        { name: "ጀ ቤተሰብ", letters: ["ጀ","ጁ","ጂ","ጃ","ጄ","ጅ","ጆ"] },
+        { name: "ገ ቤተሰብ", letters: ["ገ","ጉ","ጊ","ጋ","ጌ","ግ","ጎ"] },
+        { name: "ጠ ቤተሰብ", letters: ["ጠ","ጡ","ጢ","ጣ","ጤ","ጥ","ጦ"] },
+        { name: "ጨ ቤተሰብ", letters: ["ጨ","ጩ","ጪ","ጫ","ጬ","ጭ","ጮ"] },
+        { name: "ጰ ቤተሰብ", letters: ["ጰ","ጱ","ጲ","ጳ","ጴ","ጵ","ጶ"] },
+        { name: "ጸ ቤተሰብ", letters: ["ጸ","ጹ","ጺ","ጻ","ጼ","ጽ","ጾ"] },
+        { name: "ፀ ቤተሰብ", letters: ["ፀ","ፁ","ፂ","ፃ","ፄ","ፅ","ፆ"] },
+        { name: "ፈ ቤተሰብ", letters: ["ፈ","ፉ","ፊ","ፋ","ፌ","ፍ","ፎ"] },
+        { name: "ፐ ቤተሰብ", letters: ["ፐ","ፑ","ፒ","ፓ","ፔ","ፕ","ፖ"] }
+    ];
     
-    function buildAmharic() {
-        let list = [];
-        let order = 1;
-        for (let base of Object.keys(amharicFamilyMap)) {
-            for (let char of amharicFamilyMap[base]) {
-                list.push({ char: char, order: order++, base: base });
-            }
-        }
-        return list;
+    // English: Each stage = letters
+    const ENGLISH_STAGES = [
+        { name: "A B C D E F G", letters: ["A","B","C","D","E","F","G"] },
+        { name: "H I J K L M N", letters: ["H","I","J","K","L","M","N"] },
+        { name: "O P Q R S T U", letters: ["O","P","Q","R","S","T","U"] },
+        { name: "V W X Y Z", letters: ["V","W","X","Y","Z"] }
+    ];
+    
+    // Numbers: Each stage = 10 numbers
+    const NUMBERS_STAGES = [];
+    for (let i = 1; i <= 1000; i += 10) {
+        let end = Math.min(i + 9, 1000);
+        let letters = [];
+        for (let j = i; j <= end; j++) letters.push(j.toString());
+        NUMBERS_STAGES.push({ name: `${i} - ${end}`, letters: letters });
     }
     
-    const AMHARIC = buildAmharic();
-    const ENGLISH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').map((c, i) => ({ char: c, order: i + 1, base: "EN" }));
-    const NUMBERS = Array.from({ length: 1000 }, (_, i) => ({ char: (i + 1).toString(), order: i + 1, base: "NUM" }));
-    
+    // ======================= GAME STATE =======================
     let currentUser = null;
     let currentMode = "amharic";
-    let currentData = AMHARIC;
-    let currentQ = null;
-    let waiting = false;
-    let streak = 0;
-    let total = 0;
+    let currentStages = AMHARIC_STAGES;
+    let currentStageIndex = 0;
+    let stageMastery = {};
+    let currentQuestion = null;
+    let waitingForNext = false;
     
-    // Get the NEXT item in correct sequence
-    function getNextItem(item) {
-        let nextOrder = item.order + 1;
-        let next = currentData.find(i => i.order === nextOrder);
-        if (!next && currentData.length > 0) {
-            // If at the end, show first item as next
-            next = currentData[0];
+    // Generate a question: show pattern with missing spot
+    function generateQuestion() {
+        const stage = currentStages[currentStageIndex];
+        const letters = stage.letters;
+        
+        if (letters.length < 2) return null;
+        
+        // Random position to ask (0 = after first, 1 = between, etc.)
+        const pos = Math.floor(Math.random() * (letters.length - 1));
+        const first = letters[pos];
+        const correct = letters[pos + 1];
+        const second = letters[pos + 2] || "?";
+        
+        // Create pattern: e.g., "ሀ ___ ሂ" or "A ___ C" or "5 ___ 7"
+        const pattern = `${first} ___ ${second}`;
+        
+        // Generate wrong options
+        const wrongPool = [];
+        for (let i = 0; i < letters.length; i++) {
+            if (letters[i] !== correct && letters[i] !== first) {
+                wrongPool.push(letters[i]);
+            }
         }
-        return next;
-    }
-    
-    // Generate new question with accurate "after" logic
-    function newQuestion() {
-        let maxOrder = Math.max(...currentData.map(i => i.order));
-        let candidates = currentData.filter(i => i.order < maxOrder);
-        if (candidates.length === 0) candidates = currentData.slice(0, -1);
+        // Also add from previous stages
+        if (currentStageIndex > 0) {
+            currentStages[currentStageIndex - 1].letters.forEach(l => {
+                if (!wrongPool.includes(l) && l !== correct && l !== first) wrongPool.push(l);
+            });
+        }
         
-        let base = candidates[Math.floor(Math.random() * candidates.length)];
-        let correct = getNextItem(base);
-        
-        // Get unique wrong answers (not the base, not the correct)
-        let wrongPool = currentData.filter(i => i.char !== correct.char && i.char !== base.char);
-        let shuffled = [...wrongPool].sort(() => Math.random() - 0.5);
-        let wrongs = shuffled.slice(0, 3);
-        
+        const shuffled = [...wrongPool].sort(() => Math.random() - 0.5);
+        const wrongs = shuffled.slice(0, 3);
         let options = [correct, ...wrongs];
-        // Shuffle options
         for (let i = options.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
             [options[i], options[j]] = [options[j], options[i]];
         }
         
-        return { base, correct, options };
+        return { pattern, correct, options, first, second };
     }
     
-    // Render game with drag-and-drop
-    function render() {
-        if (!currentQ) currentQ = newQuestion();
+    function renderGame() {
+        if (!currentQuestion) {
+            currentQuestion = generateQuestion();
+            if (!currentQuestion) return;
+        }
         
-        document.getElementById("currentQuestion").innerText = currentQ.base.char;
+        document.getElementById("sequencePattern").innerHTML = currentQuestion.pattern;
         
-        let container = document.getElementById("optionsContainer");
-        container.innerHTML = "";
+        const optionsDiv = document.getElementById("optionsContainer");
+        optionsDiv.innerHTML = "";
         
-        currentQ.options.forEach(opt => {
-            let btn = document.createElement("div");
+        currentQuestion.options.forEach(opt => {
+            const btn = document.createElement("div");
             btn.className = "option";
-            btn.innerText = opt.char;
-            btn.setAttribute("data-value", opt.char);
-            btn.setAttribute("draggable", "true");
-            
-            // Drag start
-            btn.addEventListener("dragstart", function(e) {
-                e.dataTransfer.setData("text/plain", opt.char);
-                e.dataTransfer.effectAllowed = "copy";
-                this.classList.add("dragging");
-            });
-            
-            btn.addEventListener("dragend", function(e) {
-                this.classList.remove("dragging");
-            });
-            
-            // Touch support for mobile
-            btn.addEventListener("touchstart", function(e) {
-                let touch = e.touches[0];
-                this.setAttribute("data-touch-value", opt.char);
-                this.classList.add("dragging");
-            });
-            
-            btn.addEventListener("touchmove", function(e) {
-                e.preventDefault();
-                let touch = e.touches[0];
-                let element = document.elementFromPoint(touch.clientX, touch.clientY);
-                if (element && element.classList && element.classList.contains("answer-zone")) {
-                    document.getElementById("answerZone").classList.add("drag-over");
-                }
-            });
-            
-            btn.addEventListener("touchend", function(e) {
-                this.classList.remove("dragging");
-                document.getElementById("answerZone").classList.remove("drag-over");
-                let value = this.getAttribute("data-touch-value");
-                if (value && !waiting) {
-                    let selected = currentQ.options.find(o => o.char === value);
-                    if (selected) checkAnswer(selected);
-                }
-            });
-            
-            container.appendChild(btn);
-        });
-        
-        // Setup drop zone
-        let dropZone = document.getElementById("answerZone");
-        dropZone.addEventListener("dragover", function(e) {
-            e.preventDefault();
-            this.classList.add("drag-over");
-        });
-        
-        dropZone.addEventListener("dragleave", function(e) {
-            this.classList.remove("drag-over");
-        });
-        
-        dropZone.addEventListener("drop", function(e) {
-            e.preventDefault();
-            this.classList.remove("drag-over");
-            let droppedChar = e.dataTransfer.getData("text/plain");
-            if (droppedChar && !waiting) {
-                let selected = currentQ.options.find(o => o.char === droppedChar);
-                if (selected) checkAnswer(selected);
-            }
-        });
-        
-        // Also allow click/tap on options (fallback)
-        document.querySelectorAll(".option").forEach(opt => {
-            opt.onclick = () => {
-                if (!waiting) {
-                    let value = opt.innerText;
-                    let selected = currentQ.options.find(o => o.char === value);
-                    if (selected) checkAnswer(selected);
-                }
-            };
+            btn.innerText = opt;
+            btn.onclick = () => handleAnswer(opt);
+            optionsDiv.appendChild(btn);
         });
         
         document.getElementById("feedbackMsg").innerHTML = "";
-        waiting = false;
-        document.getElementById("progressTracker").innerHTML = `⭐ Streak: ${streak} | ✅ Total: ${total} ⭐`;
+        waitingForNext = false;
         
-        // Reset answer zone
-        document.getElementById("answerPlaceholder").classList.remove("hide");
-        document.getElementById("selectedAnswer").classList.add("hide");
-        document.getElementById("selectedAnswer").innerHTML = "";
+        // Update stage display
+        const stage = currentStages[currentStageIndex];
+        const masteredCount = stageMastery[`${currentMode}_stage_${currentStageIndex}`] || 0;
+        const totalInStage = stage.letters.length;
+        const stageProgress = Math.floor((masteredCount / totalInStage) * 100);
+        
+        document.getElementById("stageDisplay").innerHTML = `Derja ${currentStageIndex + 1}: ${stage.name}`;
+        document.getElementById("stageProgress").style.width = `${stageProgress}%`;
+        document.getElementById("masteryDisplay").innerHTML = `⭐ ${stageProgress}% Mastered`;
     }
     
-    async function checkAnswer(selected) {
-        if (waiting) return;
-        waiting = true;
+    async function handleAnswer(selected) {
+        if (waitingForNext) return;
         
-        let isCorrect = (selected.char === currentQ.correct.char);
-        let feedbackDiv = document.getElementById("feedbackMsg");
-        
-        // Show selected answer in drop zone
-        document.getElementById("answerPlaceholder").classList.add("hide");
-        let selectedDiv = document.getElementById("selectedAnswer");
-        selectedDiv.classList.remove("hide");
-        selectedDiv.innerHTML = selected.char;
+        const isCorrect = (selected === currentQuestion.correct);
+        const feedbackDiv = document.getElementById("feedbackMsg");
         
         if (isCorrect) {
-            feedbackDiv.innerHTML = "<span class='correct'>✅ ትክክል! ጥሩ! ✅ Correct!</span>";
-            streak++;
-            total++;
+            feedbackDiv.innerHTML = "<span class='correct'>✅ ትክክል! ጥሩ! ✅</span>";
+            
+            // Update mastery
+            const stageKey = `${currentMode}_stage_${currentStageIndex}`;
+            if (!stageMastery[stageKey]) stageMastery[stageKey] = 0;
+            
+            const stage = currentStages[currentStageIndex];
+            const totalLetters = stage.letters.length;
+            const currentMastered = stageMastery[stageKey];
+            
+            // Each correct answer increases mastery
+            if (currentMastered < totalLetters) {
+                stageMastery[stageKey] = Math.min(currentMastered + 1, totalLetters);
+            }
+            
+            // Check if stage completed (100% mastery)
+            if (stageMastery[stageKey] >= totalLetters) {
+                if (currentStageIndex + 1 < currentStages.length) {
+                    feedbackDiv.innerHTML += `<br><span class='correct'>🎉 Derja ${currentStageIndex + 1} ጨረስክ! ወደ ቀጣይ ደረጃ! 🎉</span>`;
+                    currentStageIndex++;
+                    // Initialize new stage mastery if needed
+                    const newStageKey = `${currentMode}_stage_${currentStageIndex}`;
+                    if (!stageMastery[newStageKey]) stageMastery[newStageKey] = 0;
+                } else {
+                    feedbackDiv.innerHTML += `<br><span class='correct'>🏆 ኮንግራትዩሌሽን! ሁሉንም ደረጃዎች ጨረስክ! 🏆</span>`;
+                }
+            }
+            
+            // Save progress to Firebase
             if (currentUser) {
                 try {
-                    await db.collection("users").doc(currentUser.uid).update({
-                        [`progress.${currentMode}.streak`]: streak,
-                        [`progress.${currentMode}.totalCorrect`]: firebase.firestore.FieldValue.increment(1),
+                    await db.collection("users").doc(currentUser.uid).set({
+                        [`progress.${currentMode}.stage`]: currentStageIndex,
+                        [`progress.${currentMode}.mastery`]: stageMastery,
                         lastActive: new Date().toISOString()
-                    });
+                    }, { merge: true });
                 } catch(e) { console.log("save error", e); }
             }
         } else {
-            feedbackDiv.innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ትክክለኛው: ${currentQ.correct.char} ❌</span>`;
-            streak = 0;
+            feedbackDiv.innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ትክክለኛው: ${currentQuestion.correct} ❌</span>`;
         }
         
-        document.getElementById("progressTracker").innerHTML = `⭐ Streak: ${streak} | ✅ Total: ${total} ⭐`;
+        waitingForNext = true;
         
-        // Disable all options
+        // Disable options
         document.querySelectorAll(".option").forEach(opt => {
-            opt.style.opacity = "0.5";
-            opt.style.pointerEvents = "none";
-            opt.setAttribute("draggable", "false");
+            opt.classList.add("disabled");
         });
+        
+        // Update progress display
+        const stage = currentStages[currentStageIndex];
+        const masteredCount = stageMastery[`${currentMode}_stage_${currentStageIndex}`] || 0;
+        const totalInStage = stage.letters.length;
+        const stageProgress = Math.floor((masteredCount / totalInStage) * 100);
+        document.getElementById("stageProgress").style.width = `${stageProgress}%`;
+        document.getElementById("masteryDisplay").innerHTML = `⭐ ${stageProgress}% Mastered`;
     }
     
-    function next() {
-        currentQ = newQuestion();
+    function nextQuestion() {
+        currentQuestion = generateQuestion();
         document.querySelectorAll(".option").forEach(opt => {
-            opt.style.opacity = "1";
-            opt.style.pointerEvents = "auto";
-            opt.setAttribute("draggable", "true");
+            opt.classList.remove("disabled");
         });
-        render();
+        renderGame();
     }
     
     function switchMode(mode) {
         currentMode = mode;
-        if (mode === "amharic") currentData = AMHARIC;
-        else if (mode === "english") currentData = ENGLISH;
-        else currentData = NUMBERS;
+        if (mode === "amharic") {
+            currentStages = AMHARIC_STAGES;
+        } else if (mode === "english") {
+            currentStages = ENGLISH_STAGES;
+        } else {
+            currentStages = NUMBERS_STAGES;
+        }
         
-        streak = 0;
-        total = 0;
-        currentQ = null;
-        render();
+        // Reset or load saved progress
+        currentStageIndex = 0;
+        if (currentUser && window.userProgress && window.userProgress[mode]) {
+            currentStageIndex = window.userProgress[mode].stage || 0;
+            stageMastery = window.userProgress[mode].mastery || {};
+        } else {
+            stageMastery = {};
+        }
+        
+        currentQuestion = null;
+        renderGame();
     }
     
-    // Auth UI (same as before)
+    // ======================= AUTHENTICATION UI =======================
     document.getElementById("showSignup").onclick = () => {
         document.getElementById("loginForm").classList.add("hide");
         document.getElementById("signupForm").classList.remove("hide");
@@ -507,10 +509,17 @@
         try {
             let cred = await auth.createUserWithEmailAndPassword(email, pass);
             await db.collection("users").doc(cred.user.uid).set({
-                name: name, email: email, createdAt: new Date().toISOString(),
-                progress: { amharic: { streak: 0, totalCorrect: 0 }, english: { streak: 0, totalCorrect: 0 }, numbers: { streak: 0, totalCorrect: 0 } }
+                name: name, 
+                email: email, 
+                createdAt: new Date().toISOString(),
+                progress: { 
+                    amharic: { stage: 0, mastery: {} }, 
+                    english: { stage: 0, mastery: {} }, 
+                    numbers: { stage: 0, mastery: {} } 
+                }
             });
             currentUser = cred.user;
+            window.userProgress = { amharic: { stage: 0, mastery: {} }, english: { stage: 0, mastery: {} }, numbers: { stage: 0, mastery: {} } };
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
@@ -525,8 +534,17 @@
         try {
             let cred = await auth.signInWithEmailAndPassword(email, pass);
             let doc = await db.collection("users").doc(cred.user.uid).get();
-            let name = doc.exists ? doc.data().name : email.split('@')[0];
+            let userData = doc.data();
+            let name = userData ? userData.name : email.split('@')[0];
             currentUser = cred.user;
+            
+            // Load saved progress
+            window.userProgress = userData?.progress || { 
+                amharic: { stage: 0, mastery: {} }, 
+                english: { stage: 0, mastery: {} }, 
+                numbers: { stage: 0, mastery: {} } 
+            };
+            
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
@@ -543,6 +561,7 @@
         document.getElementById("signupForm").classList.add("hide");
     };
     
+    // Mode switching
     document.querySelectorAll(".mode-btn").forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
@@ -550,9 +569,11 @@
             switchMode(btn.getAttribute("data-mode"));
         };
     });
-    document.getElementById("nextBtn").onclick = () => next();
     
-    console.log("✅ Tsehay Academy with DRAG & DROP! Fixed letter sequence!");
+    // Next button
+    document.getElementById("nextBtn").onclick = () => nextQuestion();
+    
+    console.log("✅ Tsehay Academy with STAGE LEARNING! Derja system ready!");
 </script>
 </body>
 </html>
