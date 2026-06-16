@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ጸሀይ ትምህርት - Tsehay Academy: Flying Letters Edition</title>
+    <title>ጸሀይ ትምህርት - Tsehay Academy: Timer & Multiple Letters</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -48,7 +48,7 @@
         .container {
             position: relative;
             z-index: 2;
-            max-width: 750px;
+            max-width: 850px;
             margin: 0 auto;
             background: rgba(255, 248, 225, 0.96);
             border-radius: 48px;
@@ -112,38 +112,85 @@
             overflow: hidden;
         }
         
-        .sequence-container {
+        /* Timer Styles */
+        .timer-container {
+            background: #ffefcf;
+            border-radius: 60px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .timer-ring {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: conic-gradient(#2e7d32 0deg, #ffd966 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
+        }
+        .timer-number {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #e67e22;
+        }
+        .timer-label {
+            font-weight: bold;
+            color: #7a4b03;
+            font-size: 14px;
+        }
+        .bonus-display {
+            background: #ffd966;
+            padding: 5px 15px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #5a3a01;
+        }
+        
+        .sequence-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             margin: 20px 0;
             flex-wrap: wrap;
         }
         
         .letter-card {
             background: #ffefcf;
-            padding: 20px 30px;
+            padding: 20px 25px;
             border-radius: 60px;
-            font-size: 60px;
+            font-size: 55px;
             font-weight: bold;
             box-shadow: inset 0 -2px 0 #ddb56b, 0 5px 15px rgba(0,0,0,0.1);
-            min-width: 100px;
+            min-width: 85px;
             text-align: center;
         }
         
         .missing-slot {
             background: #ffe0a3;
             border: 3px dashed #e67e22;
-            padding: 20px 30px;
+            padding: 20px 25px;
             border-radius: 60px;
-            font-size: 60px;
+            font-size: 55px;
             font-weight: bold;
-            min-width: 100px;
+            min-width: 85px;
             text-align: center;
             position: relative;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .missing-slot.filled {
@@ -178,14 +225,12 @@
             font-weight: bold;
             border: 3px solid #ffbb55;
             transition: all 0.2s;
-            position: relative;
         }
         
         .option:hover { transform: scale(1.05); background: #ffe0a3; }
         .option:active { transform: scale(0.95); }
         .option.disabled { opacity: 0.5; pointer-events: none; }
         
-        /* Flying animation */
         .flying {
             position: fixed;
             z-index: 1000;
@@ -201,21 +246,11 @@
         }
         
         @keyframes flyToTarget {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: translate(calc(var(--target-x) * 0.5), calc(var(--target-y) * 0.5 - 50px)) scale(1.2);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--target-x), var(--target-y)) scale(0.8);
-                opacity: 0;
-            }
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            50% { transform: translate(calc(var(--target-x) * 0.5), calc(var(--target-y) * 0.5 - 50px)) scale(1.2); opacity: 1; }
+            100% { transform: translate(var(--target-x), var(--target-y)) scale(0.8); opacity: 0; }
         }
         
-        /* Dropping animation */
         .dropping {
             position: fixed;
             z-index: 1000;
@@ -230,22 +265,11 @@
         }
         
         @keyframes dropDown {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(0, 200px) rotate(20deg);
-                opacity: 0;
-            }
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(0, 200px) rotate(20deg); opacity: 0; }
         }
         
-        .feedback {
-            margin: 15px 0;
-            font-size: 24px;
-            font-weight: bold;
-            min-height: 70px;
-        }
+        .feedback { margin: 15px 0; font-size: 22px; font-weight: bold; min-height: 70px; }
         .correct { color: #2b7a2b; }
         .wrong { color: #c0392b; }
         
@@ -272,21 +296,22 @@
         
         .hide { display: none; }
         
-        @media (max-width: 550px) {
-            .letter-card, .missing-slot { font-size: 35px; padding: 12px 18px; min-width: 70px; }
+        @media (max-width: 600px) {
+            .letter-card, .missing-slot { font-size: 35px; padding: 12px 15px; min-width: 65px; }
             .option { font-size: 30px; padding: 10px 18px; min-width: 70px; }
-            .sequence-container { gap: 10px; }
+            .sequence-container { gap: 8px; }
+            .timer-ring { width: 55px; height: 55px; }
+            .timer-number { width: 45px; height: 45px; font-size: 22px; }
         }
     </style>
 </head>
 <body>
 <div class="sun"></div>
 <div class="container" id="app">
-    <!-- AUTH SECTION -->
     <div id="authSection">
         <div class="tsehay-logo">🌞 ጸሀይ 🌞</div>
         <h1>Tsehay Academy</h1>
-        <div style="text-align: center; margin-bottom: 20px;">Flying Letters • Stage Learning • Derja</div>
+        <div style="text-align: center; margin-bottom: 20px;">Timer Challenge • Multiple Letters • Derja</div>
         
         <div id="loginForm">
             <div class="input-group">
@@ -319,7 +344,6 @@
         </div>
     </div>
 
-    <!-- LEARNING SECTION -->
     <div id="learningSection" class="hide">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <h2>☀️ ጤና ይስጥልኝ, <span id="userNameDisplay"></span>!</h2>
@@ -339,12 +363,16 @@
         </div>
         
         <div class="game-area">
-            <div style="font-size: 16px; margin-bottom: 10px;">🧠 Click the correct answer - it will FLY into place! 🚀</div>
-            <div class="sequence-container" id="sequenceContainer">
-                <div class="letter-card" id="firstLetter">ሀ</div>
-                <div class="missing-slot" id="missingSlot">___</div>
-                <div class="letter-card" id="thirdLetter">ሂ</div>
+            <div class="timer-container">
+                <div class="timer-ring">
+                    <div class="timer-number" id="timerDisplay">10</div>
+                </div>
+                <div class="timer-label">⏱️ Time Left</div>
+                <div class="bonus-display" id="bonusDisplay">⭐ Bonus: 0</div>
             </div>
+            
+            <div style="font-size: 16px; margin-bottom: 10px;">🧠 Complete the sequence - Multiple missing letters!</div>
+            <div class="sequence-container" id="sequenceContainer"></div>
             <div class="options" id="optionsContainer"></div>
             <div class="feedback" id="feedbackMsg"></div>
             <button id="nextBtn" class="next-btn">✨ Next Question ✨</button>
@@ -353,7 +381,7 @@
 </div>
 
 <script>
-    // ======================= FIREBASE CONFIG =======================
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyCxZFWBiuWqK73EUMznAlySXrsC1EPb1BE",
         authDomain: "tsehay-academy.firebaseapp.com",
@@ -367,7 +395,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    // ======================= STAGE DATA =======================
+    // Stage Data
     const AMHARIC_STAGES = [
         { name: "ሀ ቤተሰብ", letters: ["ሀ","ሁ","ሂ","ሃ","ሄ","ህ","ሆ"] },
         { name: "ለ ቤተሰብ", letters: ["ለ","ሉ","ሊ","ላ","ሌ","ል","ሎ"] },
@@ -419,102 +447,204 @@
         NUMBERS_STAGES.push({ name: `${i} - ${end}`, letters: letters });
     }
     
-    // ======================= GAME STATE =======================
+    // Game State
     let currentUser = null;
     let currentMode = "amharic";
     let currentStages = AMHARIC_STAGES;
     let currentStageIndex = 0;
     let stageMastery = {};
-    let currentFirst = "", currentCorrect = "", currentThird = "";
+    let currentMissingSlots = []; // Array of {position, correct}
+    let currentOptions = [];
     let waitingForNext = false;
+    let timerInterval = null;
+    let timeLeft = 10;
+    let currentBonus = 0;
+    
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+    
+    function startTimer() {
+        stopTimer();
+        timeLeft = 10;
+        updateTimerDisplay();
+        
+        timerInterval = setInterval(() => {
+            if (!waitingForNext) {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    if (!waitingForNext) {
+                        autoTimeout();
+                    }
+                }
+            }
+        }, 1000);
+    }
+    
+    function updateTimerDisplay() {
+        const timerDiv = document.getElementById("timerDisplay");
+        if (timerDiv) {
+            timerDiv.innerText = timeLeft;
+            // Change color based on time
+            if (timeLeft <= 3) {
+                timerDiv.style.color = "#c0392b";
+                timerDiv.style.animation = "pulse 0.5s infinite";
+            } else {
+                timerDiv.style.color = "#e67e22";
+                timerDiv.style.animation = "none";
+            }
+            
+            // Update ring
+            const ring = document.querySelector(".timer-ring");
+            if (ring) {
+                let degrees = (timeLeft / 10) * 360;
+                ring.style.background = `conic-gradient(#2e7d32 ${degrees}deg, #ffd966 ${degrees}deg)`;
+            }
+        }
+    }
+    
+    function autoTimeout() {
+        const feedbackDiv = document.getElementById("feedbackMsg");
+        feedbackDiv.innerHTML = "<span class='wrong'>⏰ Time's up! The correct answer is shown below.</span>";
+        waitingForNext = true;
+        
+        // Show correct answers in missing slots
+        const slots = document.querySelectorAll(".missing-slot");
+        slots.forEach((slot, idx) => {
+            if (idx < currentMissingSlots.length) {
+                slot.innerHTML = currentMissingSlots[idx].correct;
+                slot.classList.add("filled");
+            }
+        });
+        
+        document.querySelectorAll(".option").forEach(opt => {
+            opt.classList.add("disabled");
+        });
+        
+        stopTimer();
+    }
     
     function createConfetti() {
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             let confetti = document.createElement("div");
             confetti.className = "confetti";
             confetti.style.left = Math.random() * 100 + "%";
             confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            confetti.style.width = Math.random() * 8 + 4 + "px";
-            confetti.style.height = Math.random() * 8 + 4 + "px";
+            confetti.style.width = Math.random() * 10 + 5 + "px";
+            confetti.style.height = Math.random() * 10 + 5 + "px";
             confetti.style.animationDuration = Math.random() * 1 + 0.5 + "s";
             document.querySelector(".game-area").appendChild(confetti);
             setTimeout(() => confetti.remove(), 1000);
         }
     }
     
-    function flyToTarget(element, targetElement, isCorrect) {
-        const rect = element.getBoundingClientRect();
-        const targetRect = targetElement.getBoundingClientRect();
-        
-        const deltaX = targetRect.left + targetRect.width/2 - (rect.left + rect.width/2);
-        const deltaY = targetRect.top + targetRect.height/2 - (rect.top + rect.height/2);
-        
-        const flyingElement = document.createElement("div");
-        flyingElement.className = isCorrect ? "flying" : "dropping";
-        flyingElement.innerText = element.innerText;
-        flyingElement.style.left = rect.left + "px";
-        flyingElement.style.top = rect.top + "px";
-        flyingElement.style.position = "fixed";
-        
-        if (isCorrect) {
-            flyingElement.style.setProperty("--target-x", deltaX + "px");
-            flyingElement.style.setProperty("--target-y", deltaY + "px");
-        }
-        
-        document.body.appendChild(flyingElement);
-        
-        setTimeout(() => {
-            flyingElement.remove();
-        }, 600);
-        
-        return new Promise(resolve => setTimeout(resolve, 300));
-    }
-    
     function generateQuestion() {
         const stage = currentStages[currentStageIndex];
         const letters = stage.letters;
         
-        if (letters.length < 2) return null;
+        if (letters.length < 3) return null;
         
-        const pos = Math.floor(Math.random() * (letters.length - 1));
-        currentFirst = letters[pos];
-        currentCorrect = letters[pos + 1];
-        currentThird = letters[pos + 2] || "?";
+        // Determine how many missing slots (2-3 for more challenge)
+        let missingCount = Math.min(2 + Math.floor(Math.random() * 2), letters.length - 2);
+        let startPos = Math.floor(Math.random() * (letters.length - missingCount - 1));
         
-        const wrongPool = [];
-        for (let i = 0; i < letters.length; i++) {
-            if (letters[i] !== currentCorrect && letters[i] !== currentFirst) {
-                wrongPool.push(letters[i]);
-            }
-        }
-        if (currentStageIndex > 0) {
-            currentStages[currentStageIndex - 1].letters.forEach(l => {
-                if (!wrongPool.includes(l) && l !== currentCorrect && l !== currentFirst) wrongPool.push(l);
+        currentMissingSlots = [];
+        for (let i = 0; i < missingCount; i++) {
+            currentMissingSlots.push({
+                position: startPos + i + 1,
+                correct: letters[startPos + i + 1]
             });
         }
         
-        const shuffled = [...wrongPool].sort(() => Math.random() - 0.5);
-        const wrongs = shuffled.slice(0, 3);
-        let options = [currentCorrect, ...wrongs];
-        for (let i = options.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [options[i], options[j]] = [options[j], options[i]];
+        // Build the sequence with missing slots
+        let sequence = [];
+        let correctAnswers = [];
+        
+        for (let i = 0; i < letters.length && i < startPos + missingCount + 2; i++) {
+            let isMissing = false;
+            for (let m of currentMissingSlots) {
+                if (m.position === i) {
+                    sequence.push({ type: "missing", id: `missing_${i}` });
+                    correctAnswers.push(m.correct);
+                    isMissing = true;
+                    break;
+                }
+            }
+            if (!isMissing && i < letters.length) {
+                sequence.push({ type: "letter", value: letters[i] });
+            }
         }
         
-        return { options };
+        // Generate wrong options (pool from all letters except correct ones)
+        let wrongPool = [];
+        for (let l of letters) {
+            if (!correctAnswers.includes(l) && !sequence.some(s => s.type === "letter" && s.value === l)) {
+                wrongPool.push(l);
+            }
+        }
+        
+        // Add from previous stage
+        if (currentStageIndex > 0) {
+            currentStages[currentStageIndex - 1].letters.forEach(l => {
+                if (!wrongPool.includes(l) && !correctAnswers.includes(l)) wrongPool.push(l);
+            });
+        }
+        
+        let shuffledWrong = [...wrongPool].sort(() => Math.random() - 0.5);
+        let wrongs = shuffledWrong.slice(0, 6);
+        
+        // Options: all correct answers combined into options (one option per correct answer)
+        // But for kids, we'll give multiple options to choose from for each missing slot
+        // Actually simpler: each missing slot has its own set of options
+        // But for UX, we'll create a combined approach
+        
+        let allOptions = [...correctAnswers];
+        for (let w of wrongs) {
+            if (!allOptions.includes(w)) allOptions.push(w);
+        }
+        for (let i = allOptions.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+        }
+        
+        return { sequence, correctAnswers, allOptions };
     }
     
-    let currentOptions = [];
+    let currentSequence = [];
+    let currentCorrectAnswers = [];
     
     function renderGame() {
         const q = generateQuestion();
         if (!q) return;
-        currentOptions = q.options;
         
-        document.getElementById("firstLetter").innerText = currentFirst;
-        document.getElementById("thirdLetter").innerText = currentThird;
-        document.getElementById("missingSlot").innerHTML = "___";
-        document.getElementById("missingSlot").classList.remove("filled");
+        currentSequence = q.sequence;
+        currentCorrectAnswers = q.correctAnswers;
+        currentOptions = q.allOptions;
+        
+        const container = document.getElementById("sequenceContainer");
+        container.innerHTML = "";
+        
+        currentSequence.forEach((item, idx) => {
+            if (item.type === "letter") {
+                const div = document.createElement("div");
+                div.className = "letter-card";
+                div.innerText = item.value;
+                container.appendChild(div);
+            } else {
+                const div = document.createElement("div");
+                div.className = "missing-slot";
+                div.setAttribute("data-slot-idx", idx);
+                div.innerText = "___";
+                div.onclick = () => showOptionsForSlot(idx);
+                container.appendChild(div);
+            }
+        });
         
         const optionsDiv = document.getElementById("optionsContainer");
         optionsDiv.innerHTML = "";
@@ -529,6 +659,10 @@
         
         document.getElementById("feedbackMsg").innerHTML = "";
         waitingForNext = false;
+        currentBonus = 0;
+        document.getElementById("bonusDisplay").innerHTML = "⭐ Bonus: 0";
+        
+        startTimer();
         
         const stage = currentStages[currentStageIndex];
         const masteredCount = stageMastery[`${currentMode}_stage_${currentStageIndex}`] || 0;
@@ -540,71 +674,151 @@
         document.getElementById("masteryDisplay").innerHTML = `⭐ ${stageProgress}% Mastered`;
     }
     
+    let currentTargetSlot = null;
+    
+    function showOptionsForSlot(slotIdx) {
+        // Highlight which slot we're answering
+        document.querySelectorAll(".missing-slot").forEach(slot => {
+            slot.style.background = "#ffe0a3";
+        });
+        const slot = document.querySelector(`.missing-slot[data-slot-idx="${slotIdx}"]`);
+        if (slot) {
+            slot.style.background = "#ffcc88";
+            currentTargetSlot = slotIdx;
+        }
+    }
+    
     async function handleAnswer(element, selected) {
         if (waitingForNext) return;
         
-        const isCorrect = (selected === currentCorrect);
-        const feedbackDiv = document.getElementById("feedbackMsg");
-        const missingSlot = document.getElementById("missingSlot");
-        
-        await flyToTarget(element, missingSlot, isCorrect);
-        
-        if (isCorrect) {
-            missingSlot.innerHTML = selected;
-            missingSlot.classList.add("filled");
-            feedbackDiv.innerHTML = "<span class='correct'>✅ ትክክል! ጥሩ! 🎉</span>";
-            createConfetti();
-            
-            const stageKey = `${currentMode}_stage_${currentStageIndex}`;
-            if (!stageMastery[stageKey]) stageMastery[stageKey] = 0;
-            
-            const stage = currentStages[currentStageIndex];
-            const totalLetters = stage.letters.length;
-            const currentMastered = stageMastery[stageKey];
-            
-            if (currentMastered < totalLetters) {
-                stageMastery[stageKey] = Math.min(currentMastered + 1, totalLetters);
+        // Find which missing slot this answer belongs to
+        let matchedIndex = -1;
+        for (let i = 0; i < currentCorrectAnswers.length; i++) {
+            if (selected === currentCorrectAnswers[i]) {
+                matchedIndex = i;
+                break;
             }
-            
-            if (stageMastery[stageKey] >= totalLetters) {
-                if (currentStageIndex + 1 < currentStages.length) {
-                    feedbackDiv.innerHTML += `<br><span class='correct'>🎉 Derja ${currentStageIndex + 1} ጨረስክ! ወደ ቀጣይ ደረጃ! 🎉</span>`;
-                    currentStageIndex++;
-                    const newStageKey = `${currentMode}_stage_${currentStageIndex}`;
-                    if (!stageMastery[newStageKey]) stageMastery[newStageKey] = 0;
-                } else {
-                    feedbackDiv.innerHTML += `<br><span class='correct'>🏆 ኮንግራትዩሌሽን! ሁሉንም ጨረስክ! 🏆</span>`;
-                }
-            }
-            
-            if (currentUser) {
-                try {
-                    await db.collection("users").doc(currentUser.uid).set({
-                        [`progress.${currentMode}.stage`]: currentStageIndex,
-                        [`progress.${currentMode}.mastery`]: stageMastery,
-                        lastActive: new Date().toISOString()
-                    }, { merge: true });
-                } catch(e) { console.log("save error", e); }
-            }
-        } else {
-            feedbackDiv.innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ትክክለኛው: ${currentCorrect} ❌</span>`;
         }
         
-        waitingForNext = true;
+        if (matchedIndex === -1) {
+            // Wrong answer
+            await flyToTarget(element, null, false);
+            document.getElementById("feedbackMsg").innerHTML = `<span class='wrong'>❌ ተሳስተሃል! ${selected} ትክክል አይደለም ❌</span>`;
+            return;
+        }
         
-        document.querySelectorAll(".option").forEach(opt => {
-            opt.classList.add("disabled");
-        });
+        // Correct answer - find the corresponding missing slot
+        const slots = document.querySelectorAll(".missing-slot");
+        if (matchedIndex < slots.length) {
+            const targetSlot = slots[matchedIndex];
+            await flyToTarget(element, targetSlot, true);
+            
+            targetSlot.innerHTML = selected;
+            targetSlot.classList.add("filled");
+            targetSlot.style.background = "#ccffcc";
+            targetSlot.onclick = null;
+            
+            // Calculate bonus based on time left
+            let bonusPoints = timeLeft;
+            currentBonus += bonusPoints;
+            document.getElementById("bonusDisplay").innerHTML = `⭐ Bonus: ${currentBonus}`;
+            
+            document.getElementById("feedbackMsg").innerHTML = `<span class='correct'>✅ ትክክል! +${bonusPoints} bonus! 🎉</span>`;
+            createConfetti();
+            
+            // Check if all missing slots are filled
+            let allFilled = true;
+            slots.forEach(slot => {
+                if (slot.innerHTML === "___") allFilled = false;
+            });
+            
+            if (allFilled) {
+                // Stage mastery update
+                const stageKey = `${currentMode}_stage_${currentStageIndex}`;
+                if (!stageMastery[stageKey]) stageMastery[stageKey] = 0;
+                
+                const stage = currentStages[currentStageIndex];
+                const totalLetters = stage.letters.length;
+                const currentMastered = stageMastery[stageKey];
+                
+                if (currentMastered < totalLetters) {
+                    stageMastery[stageKey] = Math.min(currentMastered + 1, totalLetters);
+                }
+                
+                if (stageMastery[stageKey] >= totalLetters) {
+                    if (currentStageIndex + 1 < currentStages.length) {
+                        document.getElementById("feedbackMsg").innerHTML += `<br><span class='correct'>🎉 Derja ${currentStageIndex + 1} ጨረስክ! ወደ ቀጣይ ደረጃ! 🎉</span>`;
+                        currentStageIndex++;
+                        const newStageKey = `${currentMode}_stage_${currentStageIndex}`;
+                        if (!stageMastery[newStageKey]) stageMastery[newStageKey] = 0;
+                    } else {
+                        document.getElementById("feedbackMsg").innerHTML += `<br><span class='correct'>🏆 ኮንግራትዩሌሽን! ሁሉንም ጨረስክ! 🏆</span>`;
+                    }
+                }
+                
+                if (currentUser) {
+                    try {
+                        db.collection("users").doc(currentUser.uid).set({
+                            [`progress.${currentMode}.stage`]: currentStageIndex,
+                            [`progress.${currentMode}.mastery`]: stageMastery,
+                            lastActive: new Date().toISOString()
+                        }, { merge: true });
+                    } catch(e) {}
+                }
+                
+                waitingForNext = true;
+                document.querySelectorAll(".option").forEach(opt => {
+                    opt.classList.add("disabled");
+                });
+                stopTimer();
+            }
+        }
+    }
+    
+    async function flyToTarget(element, targetElement, isCorrect) {
+        if (!targetElement && !isCorrect) {
+            // Wrong answer - just drop
+            const rect = element.getBoundingClientRect();
+            const dropping = document.createElement("div");
+            dropping.className = "dropping";
+            dropping.innerText = element.innerText;
+            dropping.style.left = rect.left + "px";
+            dropping.style.top = rect.top + "px";
+            dropping.style.position = "fixed";
+            document.body.appendChild(dropping);
+            setTimeout(() => dropping.remove(), 500);
+            return;
+        }
         
-        const stage = currentStages[currentStageIndex];
-        const masteredCount = stageMastery[`${currentMode}_stage_${currentStageIndex}`] || 0;
-        const totalInStage = stage.letters.length;
-        const stageProgress = Math.floor((masteredCount / totalInStage) * 100);
-        document.getElementById("stageProgress").style.width = `${stageProgress}%`;
-        document.getElementById("masteryDisplay").innerHTML = `⭐ ${stageProgress}% Mastered`;
+        if (targetElement && isCorrect) {
+            const rect = element.getBoundingClientRect();
+            const targetRect = targetElement.getBoundingClientRect();
+            
+            const deltaX = targetRect.left + targetRect.width/2 - (rect.left + rect.width/2);
+            const deltaY = targetRect.top + targetRect.height/2 - (rect.top + rect.height/2);
+            
+            const flying = document.createElement("div");
+            flying.className = "flying";
+            flying.innerText = element.innerText;
+            flying.style.left = rect.left + "px";
+            flying.style.top = rect.top + "px";
+            flying.style.position = "fixed";
+            flying.style.setProperty("--target-x", deltaX + "px");
+            flying.style.setProperty("--target-y", deltaY + "px");
+            document.body.appendChild(flying);
+            
+            // Remove the clicked option
+            element.style.opacity = "0";
+            element.style.pointerEvents = "none";
+            
+            setTimeout(() => {
+                flying.remove();
+            }, 600);
+        }
     }
     
     function nextQuestion() {
+        stopTimer();
         generateQuestion();
         renderGame();
     }
@@ -623,11 +837,10 @@
             stageMastery = {};
         }
         
-        generateQuestion();
         renderGame();
     }
     
-    // ======================= AUTHENTICATION =======================
+    // Auth (same as before)
     document.getElementById("showSignup").onclick = () => {
         document.getElementById("loginForm").classList.add("hide");
         document.getElementById("signupForm").classList.remove("hide");
@@ -654,7 +867,7 @@
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
-            switchMode("amharic");
+            renderGame();
         } catch(e) { alert("Signup error: " + e.message); }
     };
     
@@ -672,12 +885,13 @@
             document.getElementById("authSection").classList.add("hide");
             document.getElementById("learningSection").classList.remove("hide");
             document.getElementById("userNameDisplay").innerText = name;
-            switchMode("amharic");
+            renderGame();
         } catch(e) { alert("Login failed: " + e.message); }
     };
     
     document.getElementById("logoutBtn").onclick = async () => {
         await auth.signOut();
+        stopTimer();
         currentUser = null;
         document.getElementById("authSection").classList.remove("hide");
         document.getElementById("learningSection").classList.add("hide");
@@ -695,7 +909,7 @@
     
     document.getElementById("nextBtn").onclick = () => nextQuestion();
     
-    console.log("✅ Tsehay Academy with FLYING LETTERS! 🚀");
+    console.log("✅ Tsehay Academy with MULTIPLE LETTERS & 10s TIMER!");
 </script>
 </body>
 </html>
